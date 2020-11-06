@@ -2,7 +2,7 @@ connection: "datamarket-np"
 
 # include all the views
 include: "/views/**/*.view"
-include: "Chaitanya_DB.dashboard"
+include: "Chaitanya_DB.dashboard.lookml"
 
 
 datagroup: sre_poc_project_default_datagroup {
