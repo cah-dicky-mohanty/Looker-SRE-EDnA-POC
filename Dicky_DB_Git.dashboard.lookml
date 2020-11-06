@@ -6,6 +6,7 @@
     title: SOURCE Rebate Projection by Account
     model: SRE_Model
     explore: SRE_Explore
+    dashboard: Chaitanya_DB
     type: table
     fields: [arch_psdw_views_invoice_line.Additonal_SOURCE_Purchases, arch_psdw_views_invoice_line.SOURCE_Purchases,
       arch_psdw_views_invoice_line.Rebate_Inelig_SOURCE_Purchases, arch_psdw_views_invoice_line.Total_Purchases,
