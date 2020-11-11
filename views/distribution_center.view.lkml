@@ -1,0 +1,276 @@
+view: distribution_center {
+  sql_table_name: `VI0_PHM_SDW_NP.DISTRIBUTION_CENTER`
+    ;;
+
+  dimension: act_stat_id {
+    type: string
+    sql: ${TABLE}.ACT_STAT_ID ;;
+  }
+
+  dimension: adc_bsns_unit_cde {
+    type: number
+    sql: ${TABLE}.ADC_BSNS_UNIT_CDE ;;
+  }
+
+  dimension: adc_bsns_unit_desc {
+    type: string
+    sql: ${TABLE}.ADC_BSNS_UNIT_DESC ;;
+  }
+
+  dimension: adc_bsns_unit_id {
+    type: string
+    sql: ${TABLE}.ADC_BSNS_UNIT_ID ;;
+  }
+
+  dimension: addr2_txt {
+    type: string
+    sql: ${TABLE}.ADDR2_TXT ;;
+  }
+
+  dimension: addr_txt {
+    type: string
+    sql: ${TABLE}.ADDR_TXT ;;
+  }
+
+  dimension: brkrg_flg {
+    type: string
+    sql: ${TABLE}.BRKRG_FLG ;;
+  }
+
+  dimension: bsns_unit_cde {
+    type: number
+    sql: ${TABLE}.BSNS_UNIT_CDE ;;
+  }
+
+  dimension: bsns_unit_desc {
+    type: string
+    sql: ${TABLE}.BSNS_UNIT_DESC ;;
+  }
+
+  dimension: city {
+    type: string
+    sql: ${TABLE}.CITY ;;
+  }
+
+  dimension: curr_vrsn_flg {
+    type: string
+    sql: ${TABLE}.CURR_VRSN_FLG ;;
+  }
+
+  dimension: dea_lic_num {
+    type: string
+    sql: ${TABLE}.DEA_LIC_NUM ;;
+  }
+
+  dimension: del_flg {
+    type: string
+    sql: ${TABLE}.DEL_FLG ;;
+  }
+
+  dimension: desc_abbr_txt {
+    type: string
+    sql: ${TABLE}.DESC_ABBR_TXT ;;
+  }
+
+  dimension: dist_center_key_num {
+    type: number
+    sql: ${TABLE}.DIST_CENTER_KEY_NUM ;;
+  }
+
+  dimension: dist_center_nam {
+    type: string
+    sql: ${TABLE}.DIST_CENTER_NAM ;;
+  }
+
+  dimension: group_cde {
+    type: number
+    sql: ${TABLE}.GROUP_CDE ;;
+  }
+
+  dimension: group_desc {
+    type: string
+    sql: ${TABLE}.GROUP_DESC ;;
+  }
+
+  dimension: hdp_current_version_flag {
+    type: string
+    sql: ${TABLE}.HDP_CURRENT_VERSION_FLAG ;;
+  }
+
+  dimension: hdp_end_date {
+    type: string
+    sql: ${TABLE}.HDP_END_DATE ;;
+  }
+
+  dimension_group: hdp_load_stp {
+    type: time
+    timeframes: [
+      raw,
+      time,
+      date,
+      week,
+      month,
+      quarter,
+      year
+    ]
+    sql: ${TABLE}.HDP_LOAD_STP ;;
+  }
+
+  dimension: hdp_start_date {
+    type: string
+    sql: ${TABLE}.HDP_START_DATE ;;
+  }
+
+  dimension: hdp_tx_flag {
+    type: string
+    sql: ${TABLE}.HDP_TX_FLAG ;;
+  }
+
+  dimension: hin_id {
+    type: string
+    sql: ${TABLE}.HIN_ID ;;
+  }
+
+  dimension: hlth_sctr_cde {
+    type: number
+    sql: ${TABLE}.HLTH_SCTR_CDE ;;
+  }
+
+  dimension: hlth_sctr_desc {
+    type: string
+    sql: ${TABLE}.HLTH_SCTR_DESC ;;
+  }
+
+  dimension: location_num {
+    type: number
+    sql: ${TABLE}.LOCATION_NUM ;;
+  }
+
+  dimension: main_floor_square_footage_qty {
+    type: number
+    sql: ${TABLE}.MAIN_FLOOR_SQUARE_FOOTAGE_QTY ;;
+  }
+
+  dimension: mezzanine_square_footage_qty {
+    type: number
+    sql: ${TABLE}.MEZZANINE_SQUARE_FOOTAGE_QTY ;;
+  }
+
+  dimension: oprtn_active_flg {
+    type: string
+    sql: ${TABLE}.OPRTN_ACTIVE_FLG ;;
+  }
+
+  dimension: phone_num {
+    type: number
+    sql: ${TABLE}.PHONE_NUM ;;
+  }
+
+  dimension: pick_method_desc {
+    type: string
+    sql: ${TABLE}.PICK_METHOD_DESC ;;
+  }
+
+  dimension: prfl_id {
+    type: string
+    sql: ${TABLE}.PRFL_ID ;;
+  }
+
+  dimension: region_cde {
+    type: number
+    sql: ${TABLE}.REGION_CDE ;;
+  }
+
+  dimension: region_desc {
+    type: string
+    sql: ${TABLE}.REGION_DESC ;;
+  }
+
+  dimension: remote_outq_id {
+    type: string
+    sql: ${TABLE}.REMOTE_OUTQ_ID ;;
+  }
+
+  dimension_group: row_add_stp {
+    type: time
+    timeframes: [
+      raw,
+      time,
+      date,
+      week,
+      month,
+      quarter,
+      year
+    ]
+    sql: ${TABLE}.ROW_ADD_STP ;;
+  }
+
+  dimension: row_add_user_id {
+    type: string
+    sql: ${TABLE}.ROW_ADD_USER_ID ;;
+  }
+
+  dimension_group: row_update_stp {
+    type: time
+    timeframes: [
+      raw,
+      time,
+      date,
+      week,
+      month,
+      quarter,
+      year
+    ]
+    sql: ${TABLE}.ROW_UPDATE_STP ;;
+  }
+
+  dimension: row_update_user_id {
+    type: string
+    sql: ${TABLE}.ROW_UPDATE_USER_ID ;;
+  }
+
+  dimension: square_footage_qty {
+    type: number
+    sql: ${TABLE}.SQUARE_FOOTAGE_QTY ;;
+  }
+
+  dimension: src_system_cde {
+    type: number
+    sql: ${TABLE}.SRC_SYSTEM_CDE ;;
+  }
+
+  dimension: src_system_desc {
+    type: string
+    sql: ${TABLE}.SRC_SYSTEM_DESC ;;
+  }
+
+  dimension: state {
+    type: string
+    sql: ${TABLE}.STATE ;;
+  }
+
+  dimension: system_cde {
+    type: number
+    sql: ${TABLE}.SYSTEM_CDE ;;
+  }
+
+  dimension: system_nam {
+    type: string
+    sql: ${TABLE}.SYSTEM_NAM ;;
+  }
+
+  dimension: temp_hour_rate_dlr {
+    type: number
+    sql: ${TABLE}.TEMP_HOUR_RATE_DLR ;;
+  }
+
+  dimension: zip {
+    type: zipcode
+    sql: ${TABLE}.ZIP ;;
+  }
+
+  measure: count {
+    type: count
+    drill_fields: []
+  }
+}
