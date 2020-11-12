@@ -1,6 +1,8 @@
 view: invoice_line_cv {
-  sql_table_name: `VI0_PHM_SDW_NP.INVOICE_LINE_CV`
-    ;;
+#   sql_table_name: `VI0_PHM_SDW_NP.INVOICE_LINE_CV`
+  sql_table_name: `PSDW.ARCH_PSDW_VIEWS_INVOICE_LINE` ;;
+
+
 
 
   dimension: cah_image {
@@ -69,7 +71,7 @@ view: invoice_line_cv {
     type: sum
     sql: ${ext_sell_dlr} ;;
     filters: [
-      product_cv.rx_indicator: "Rx"
+    product_cv.rx_indicator: "Rx"
     ]
   }
 
