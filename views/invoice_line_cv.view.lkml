@@ -1,6 +1,6 @@
 view: invoice_line_cv {
-#   sql_table_name: `VI0_PHM_SDW_NP.INVOICE_LINE_CV`
-  sql_table_name: `PSDW.ARCH_PSDW_VIEWS_INVOICE_LINE` ;;
+sql_table_name: `VI0_PHM_SDW_NP.INVOICE_LINE_CV`;;
+#  sql_table_name: `datamarket-np-cah.PSDW.ARCH_PSDW_VIEWS_INVOICE_LINE` ;;
 
 
 

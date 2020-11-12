@@ -123,7 +123,7 @@ explore: SRE_Explore_2 {
     sql_on: ${ldap_user_appl_cv.mrcry_user_id} = ${mercury_user_cv.mrcry_user_id} ;;
     relationship: many_to_one
     fields: [mrcry_user_id, appl_nam]
-    sql_where: ${ldap_user_appl_cv.appl_nam} = 'ORDER EXPRESS REPORTING'  ;;
+    sql_where: ${ldap_user_appl_cv.appl_nam} = 'ORDER_EXPRESS_REPORTING'  ;;
   }
 
 }
