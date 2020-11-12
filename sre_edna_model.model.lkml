@@ -102,3 +102,28 @@ explore: SRE_Explore{
   }
 
 }
+
+explore: SRE_Explore_2 {
+  view_name: account_user_rlt_cv
+  view_label: "Account User Rlt"
+
+
+  join:  mercury_user_cv{
+    view_label: "Mercury User"
+    type: left_outer
+    sql_on: ${account_user_rlt_cv.mrcry_user_id} = ${mercury_user_cv.mrcry_user_id} ;;
+    relationship: many_to_one
+    fields: [mrcry_user_id, user_id]
+    sql_where: ${mercury_user_cv.user_id_active_flg} = 'Y'  ;;
+  }
+
+  join:  ldap_user_appl_cv{
+    view_label: "LDAP User Appl"
+    type: left_outer
+    sql_on: ${ldap_user_appl_cv.mrcry_user_id} = ${mercury_user_cv.mrcry_user_id} ;;
+    relationship: many_to_one
+    fields: [mrcry_user_id, appl_nam]
+    sql_where: ${ldap_user_appl_cv.appl_nam} = 'ORDER EXPRESS REPORTING'  ;;
+  }
+
+}
