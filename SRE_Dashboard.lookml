@@ -7,22 +7,22 @@
     model: SRE_Model
     explore: SRE_Explore
     type: table
-    fields: [arch_psdw_views_invoice_line.Additonal_SOURCE_Purchases, arch_psdw_views_invoice_line.SOURCE_Purchases,
-      arch_psdw_views_invoice_line.Rebate_Inelig_SOURCE_Purchases, arch_psdw_views_invoice_line.Total_Purchases,
-      arch_psdw_views_invoice_line.Total_Rx_Purchases, arch_psdw_views_invoice_line.SPX_Purchases,
-      arch_psdw_views_invoice_line.SPD_Purchases]
+    fields: [invoice_line_cv.Additonal_SOURCE_Purchases, invoice_line_cv.SOURCE_Purchases,
+      invoice_line_cv.Rebate_Inelig_SOURCE_Purchases, invoice_line_cv.Total_Purchases,
+      invoice_line_cv.Total_Rx_Purchases, invoice_line_cv.SPX_Purchases,
+      invoice_line_cv.SPD_Purchases]
     filters:
-      arch_psdw_views_time_detail.rfrnc_dte_date: 2020/09/01 to 2020/11/02
-      arch_psdw_views_invoice_line.Enter_SOURCE_Purchases: '5000'
-    sorts: [arch_psdw_views_invoice_line.SOURCE_Purchases desc]
+      time_detail.rfrnc_dte_date: 2020/09/01 to 2020/11/02
+      invoice_line_cv.Enter_SOURCE_Purchases: '5000'
+    sorts: [invoice_line_cv.SOURCE_Purchases desc]
     limit: 50
     dynamic_fields: [{table_calculation: rebate_elig_source_purchases, label: Rebate
-          Elig SOURCE Purchases, expression: "${arch_psdw_views_invoice_line.SOURCE_Purchases}\
-          \ - ${arch_psdw_views_invoice_line.Rebate_Inelig_SOURCE_Purchases}", value_format: !!null '',
+          Elig SOURCE Purchases, expression: "${invoice_line_cv.SOURCE_Purchases}\
+          \ - ${invoice_line_cv.Rebate_Inelig_SOURCE_Purchases}", value_format: !!null '',
         value_format_name: !!null '', _kind_hint: measure, _type_hint: number}, {
-        table_calculation: sourcetotal, label: SOURCE/Total, expression: "${arch_psdw_views_invoice_line.SOURCE_Purchases}/${arch_psdw_views_invoice_line.Total_Purchases}",
+        table_calculation: sourcetotal, label: SOURCE/Total, expression: "${invoice_line_cv.SOURCE_Purchases}/${invoice_line_cv.Total_Purchases}",
         value_format: !!null '', value_format_name: usd_0, _kind_hint: measure, _type_hint: number},
-      {table_calculation: sourcetotal_rx, label: SOURCE/Total Rx, expression: "${arch_psdw_views_invoice_line.SOURCE_Purchases}/${arch_psdw_views_invoice_line.Total_Rx_Purchases}",
+      {table_calculation: sourcetotal_rx, label: SOURCE/Total Rx, expression: "${invoice_line_cv.SOURCE_Purchases}/${invoice_line_cv.Total_Rx_Purchases}",
         value_format: !!null '', value_format_name: usd_0, _kind_hint: measure, _type_hint: number}]
     query_timezone: America/Los_Angeles
     show_view_names: false
@@ -49,13 +49,13 @@
     type: single_value
     fields: [invoices_as_of]
     filters:
-      arch_psdw_views_invoice_line.Enter_SOURCE_Purchases: '1000'
+      invoice_line_cv.Enter_SOURCE_Purchases: '1000'
     sorts: [invoices_as_of]
     limit: 50
-    dynamic_fields: [{measure: source_purchases, based_on: arch_psdw_views_invoice_line.ext_sell_dlr,
+    dynamic_fields: [{measure: source_purchases, based_on: invoice_line_cv.ext_sell_dlr,
         type: sum, label: SOURCE Purchases, value_format: !!null '', value_format_name: !!null '',
-        _kind_hint: measure, _type_hint: number, filter_expression: ' ${arch_psdw_views_cardinal_account_group.Source_Contract}
-          = "Y"'}, {measure: rebate_inelig_source_purchases, based_on: arch_psdw_views_invoice_line.ext_sell_dlr,
+        _kind_hint: measure, _type_hint: number, filter_expression: ' ${cardinal_account_group.Source_Contract}
+          = "Y"'}, {measure: rebate_inelig_source_purchases, based_on: invoice_line_cv.ext_sell_dlr,
         type: sum, label: Rebate Inelig SOURCE Purchases, expression: !!null '', value_format: !!null '',
         value_format_name: !!null '', _kind_hint: measure, _type_hint: number}, {
         dimension: invoices_as_of, label: 'Invoices as of:', expression: now(), value_format: !!null '',
@@ -105,8 +105,8 @@
     model: SRE_Model
     explore: SRE_Explore
     type: looker_bar
-    fields: [arch_psdw_views_product.gen_nam, arch_psdw_views_invoice_line.Rebate_Inelig_SOURCE_Purchases]
-    sorts: [arch_psdw_views_invoice_line.Rebate_Inelig_SOURCE_Purchases desc]
+    fields: [product_cv.gen_nam, invoice_line_cv.Rebate_Inelig_SOURCE_Purchases]
+    sorts: [invoice_line_cv.Rebate_Inelig_SOURCE_Purchases desc]
     limit: 10
     query_timezone: America/Los_Angeles
     x_axis_gridlines: false
@@ -149,9 +149,9 @@
     font_size: 100%
     series_types: {}
     series_colors:
-      arch_psdw_views_invoice_line.Rebate_Inelig_SOURCE_Purchases: "#3B8EF3"
+      invoice_line_cv.Rebate_Inelig_SOURCE_Purchases: "#3B8EF3"
     series_labels:
-      arch_psdw_views_invoice_line.Rebate_Inelig_SOURCE_Purchases: Top SOURCE Purchases
+      invoice_line_cv.Rebate_Inelig_SOURCE_Purchases: Top SOURCE Purchases
     series_point_styles: {}
     defaults_version: 1
     listen: {}
@@ -175,11 +175,11 @@
     model: SRE_Model
     explore: SRE_Explore
     type: looker_area
-    fields: [arch_psdw_views_contract_group.cntrct_group_nam, arch_psdw_views_invoice_line.Total_Rx_Purchases]
+    fields: [contract_group_cv_cv_cv_cv.cntrct_group_nam, invoice_line_cv.Total_Rx_Purchases]
     filters:
-      arch_psdw_views_contract_group.cntrct_group_nam: "-N/A^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^\
+      contract_group_cv.cntrct_group_nam: "-N/A^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^\
         \ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ "
-    sorts: [arch_psdw_views_invoice_line.Total_Rx_Purchases desc]
+    sorts: [invoice_line_cv.Total_Rx_Purchases desc]
     limit: 10
     query_timezone: America/Los_Angeles
     x_axis_gridlines: false
@@ -218,7 +218,7 @@
     series_types: {}
     series_colors: {}
     series_labels:
-      arch_psdw_views_invoice_line.Total_Rx_Purchases: On Contract Purchases
+      invoice_line_cv.Total_Rx_Purchases: On Contract Purchases
     swap_axes: false
     ordering: none
     show_null_labels: false
@@ -232,22 +232,22 @@
     model: SRE_Model
     explore: SRE_Explore
     type: table
-    fields: [arch_psdw_views_invoice_line.Additonal_SOURCE_Purchases, arch_psdw_views_invoice_line.SOURCE_Purchases,
-      arch_psdw_views_invoice_line.Rebate_Inelig_SOURCE_Purchases, arch_psdw_views_invoice_line.Total_Purchases,
-      arch_psdw_views_invoice_line.Total_Rx_Purchases, arch_psdw_views_invoice_line.SPX_Purchases,
-      arch_psdw_views_invoice_line.SPD_Purchases]
+    fields: [invoice_line_cv.Additonal_SOURCE_Purchases, invoice_line_cv.SOURCE_Purchases,
+      invoice_line_cv.Rebate_Inelig_SOURCE_Purchases, invoice_line_cv.Total_Purchases,
+      invoice_line_cv.Total_Rx_Purchases, invoice_line_cv.SPX_Purchases,
+      invoice_line_cv.SPD_Purchases]
     filters:
-      arch_psdw_views_time_detail.rfrnc_dte_date: 2020/09/01 to 2020/11/02
-      arch_psdw_views_invoice_line.Enter_SOURCE_Purchases: '3000'
-    sorts: [arch_psdw_views_invoice_line.SOURCE_Purchases desc]
+      time_detail.rfrnc_dte_date: 2020/09/01 to 2020/11/02
+      invoice_line_cv.Enter_SOURCE_Purchases: '3000'
+    sorts: [invoice_line_cv.SOURCE_Purchases desc]
     limit: 50
     dynamic_fields: [{table_calculation: rebate_elig_source_purchases, label: Rebate
-          Elig SOURCE Purchases, expression: "${arch_psdw_views_invoice_line.SOURCE_Purchases}\
-          \ - ${arch_psdw_views_invoice_line.Rebate_Inelig_SOURCE_Purchases}", value_format: !!null '',
+          Elig SOURCE Purchases, expression: "${invoice_line_cv.SOURCE_Purchases}\
+          \ - ${invoice_line_cv.Rebate_Inelig_SOURCE_Purchases}", value_format: !!null '',
         value_format_name: !!null '', _kind_hint: measure, _type_hint: number}, {
-        table_calculation: sourcetotal, label: SOURCE/Total, expression: "${arch_psdw_views_invoice_line.SOURCE_Purchases}/${arch_psdw_views_invoice_line.Total_Purchases}",
+        table_calculation: sourcetotal, label: SOURCE/Total, expression: "${invoice_line_cv.SOURCE_Purchases}/${invoice_line_cv.Total_Purchases}",
         value_format: !!null '', value_format_name: usd_0, _kind_hint: measure, _type_hint: number},
-      {table_calculation: sourcetotal_rx, label: SOURCE/Total Rx, expression: "${arch_psdw_views_invoice_line.SOURCE_Purchases}/${arch_psdw_views_invoice_line.Total_Rx_Purchases}",
+      {table_calculation: sourcetotal_rx, label: SOURCE/Total Rx, expression: "${invoice_line_cv.SOURCE_Purchases}/${invoice_line_cv.Total_Rx_Purchases}",
         value_format: !!null '', value_format_name: usd_0, _kind_hint: measure, _type_hint: number}]
     query_timezone: America/Los_Angeles
     show_view_names: false
@@ -276,7 +276,7 @@
     model: SRE_Model
     explore: SRE_Explore
     listens_to_filters: []
-    field: arch_psdw_views_time_detail.rfrnc_dte_date
+    field: time_detail.rfrnc_dte_date
   - name: Account Name Selector
     title: Account Name Selector
     type: field_filter
@@ -286,7 +286,7 @@
     model: SRE_Model
     explore: SRE_Explore
     listens_to_filters: []
-    field: arch_psdw_views_ship_to_account.account_name_selector
+    field: ship_to_account_cv.account_name_selector
   - name: Enter SOURCE Dollars
     title: Enter SOURCE Dollars
     type: field_filter
@@ -296,4 +296,4 @@
     model: SRE_Model
     explore: SRE_Explore
     listens_to_filters: []
-    field: arch_psdw_views_invoice_line.Enter_SOURCE_Purchases
+    field: invoice_line_cv.Enter_SOURCE_Purchases
