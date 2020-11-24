@@ -198,7 +198,7 @@ view: mercury_user_cv {
 
   dimension: user_id {
     type: string
-    required_access_grants: [can_view_user_id_data]
+#     required_access_grants: [can_view_user_id_data]
     sql: ${TABLE}.USER_ID ;;
   }
 
