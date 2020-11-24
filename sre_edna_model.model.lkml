@@ -13,11 +13,19 @@ datagroup: sre_poc_edna_default_datagroup {
 
 persist_with: sre_poc_edna_default_datagroup
 
+access_grant: can_view_user_id_data {
+  user_attribute: mapped_user_ids
+  allowed_values: ["qc_oe_rpt2"]
+}
 
 explore: SRE_Explore{
 
+
   view_name: invoice_line_cv
   view_label: "Invoice Line"
+#   always_filter: {
+#     filters: [time_detail_cv.rfrnc_dte_date: "2020-06-01"]
+#   }
 
 
   join:  ship_to_account_cv{
@@ -101,7 +109,14 @@ explore: SRE_Explore{
     relationship: many_to_one
   }
 
-}
+
+  access_filter: {
+     field: time_detail_cv.rfrnc_dte_date
+     user_attribute: explore_date_range
+   }
+
+ }
+
 
 explore: SRE_Explore_2 {
   view_name: account_user_rlt_cv
@@ -124,6 +139,11 @@ explore: SRE_Explore_2 {
     relationship: many_to_one
     fields: [mrcry_user_id, appl_nam]
     sql_where: ${ldap_user_appl_cv.appl_nam} = 'ORDER_EXPRESS_REPORTING'  ;;
+  }
+
+  access_filter: {
+    field: mercury_user_cv.user_id
+    user_attribute: available_user_ids
   }
 
 }
