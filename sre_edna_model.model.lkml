@@ -13,10 +13,10 @@ datagroup: sre_poc_edna_default_datagroup {
 
 persist_with: sre_poc_edna_default_datagroup
 
-access_grant: can_view_user_id_data {
-  user_attribute: mapped_user_ids
-  allowed_values: ["qc_oe_rpt2"]
-}
+# access_grant: can_view_user_id_data {
+#   user_attribute: mapped_user_ids
+#   allowed_values: ["qc_oe_rpt2"]
+# }
 
 explore: SRE_Explore{
 
