@@ -2,6 +2,156 @@ view: time_detail_cv {
   sql_table_name: `VI0_PHM_SDW_NP.TIME_DETAIL_CV`
     ;;
 
+
+  parameter: select_timeframe  {
+    type: unquoted
+    allowed_value: { value: "Day" }
+    allowed_value: { value: "Week" }
+    allowed_value: { value: "Month" }
+    allowed_value: { value: "Quarter" }
+    allowed_value: { value: "Year" }
+  }
+
+  parameter: select_reference_date {
+    type: date_time
+#     convert_tz: yes
+  }
+
+
+  parameter: apply_to_date_filter {
+    type: yesno
+    default_value: "false"
+  }
+
+
+  dimension: invoice_date {
+    label: "Invoice Date"
+#     type: date_time
+    label_from_parameter: select_timeframe
+   sql:
+    {% if select_timeframe._parameter_value == 'Day' %} ${rfrnc_dte_date}
+    {% elsif select_timeframe._parameter_value == 'Week' %} ${rfrnc_dte_week}
+    {% elsif select_timeframe._parameter_value == 'Month' %} ${rfrnc_dte_month}
+    {% elsif select_timeframe._parameter_value == 'Quarter' %} ${rfrnc_dte_quarter}
+    {% elsif select_timeframe._parameter_value == 'Year' %} ${rfrnc_dte_year}
+    {% else %} NULL
+    {% endif %};;
+  }
+
+#    CASE
+#     WHEN {% parameter select_timeframe %} = 'Day'  THEN ${rfrnc_dte_date}
+#     WHEN {% parameter select_timeframe %} = 'Quarter' THEN ${rfrnc_dte_date}
+#     ELSE NULL
+#     END ;;
+#  WHEN {% parameter select_timeframe %} = 'Month' THEN ${rfrnc_dte_month}::VARCHAR
+#     WHEN {% parameter select_timeframe %} = 'Quarter' THEN ${rfrnc_dte_quarter}::VARCHAR
+#     WHEN {% parameter select_timeframe %} = 'Year' THEN ${rfrnc_dte_year}::VARCHAR
+
+
+
+  dimension: current_vs_previous_timeperiod {
+    description: "Use this dimension along with \"select_timeframe\" Filter"
+    type: string
+    sql:
+    CASE
+      WHEN DATE_TRUNC(${rfrnc_dte_raw},  {% parameter select_timeframe  %}) = DATE_TRUNC({% if select_reference_date._is_filtered %}{% parameter select_reference_date %} {% else %} ${rfrnc_dte_raw}{% endif %}, {% parameter select_timeframe %})
+        THEN '{% if select_reference_date._is_filtered %}Reference {% else %}Current {% endif %} {% parameter select_timeframe %}'
+      WHEN DATE_TRUNC(${rfrnc_dte_raw},  {% parameter select_timeframe  %}) = DATE_TRUNC(DATE_SUB({% if select_reference_date._is_filtered %}{% parameter select_reference_date %} {% else %} ${rfrnc_dte_raw}{% endif %}, INTERVAL 1 {% parameter select_timeframe %}), {% parameter select_timeframe %})
+        THEN "Previous {% parameter select_timeframe %}"
+      ELSE NULL
+    END
+    ;;
+  }
+
+
+  filter: date_filter {
+    description: "Use this date filter in combination with the timeframes dimension for dynamic date filtering"
+    type: date
+  }
+
+
+
+  dimension_group: filter_start_date {
+    type: time
+    timeframes: [raw,date]
+    sql: CASE WHEN {% date_start date_filter %} IS NULL THEN '2015-01-01' ELSE CAST({% date_start date_filter %} AS DATE) END;;
+  }
+
+
+
+  dimension_group: filter_end_date {
+    type: time
+    timeframes: [raw,date]
+    sql: CASE WHEN {% date_end date_filter %} IS NULL THEN CURRENT_DATE ELSE CAST({% date_end date_filter %} AS DATE) END;;
+  }
+
+
+
+  dimension: interval {
+    type: number
+    sql: DATE_DIFF(${filter_start_date_raw}, ${filter_end_date_raw}, DAY);;
+  }
+
+
+
+  dimension: previous_start_date {
+    type: string
+    sql: DATE_ADD(${filter_start_date_raw}, INTERVAL ${interval} DAY) ;;
+  }
+
+
+  dimension: is_current_period {
+    type: yesno
+    sql: ${rfrnc_dte_date} >= ${filter_start_date_date} AND ${rfrnc_dte_date} < ${filter_end_date_date} ;;
+  }
+
+  dimension: is_previous_period {
+    type: yesno
+    sql: ${rfrnc_dte_date} >= ${previous_start_date} AND ${rfrnc_dte_date} < ${filter_start_date_date} ;;
+  }
+
+
+
+  dimension: timeframes {
+    description: "Use this field in combination with the date filter field for dynamic date filtering"
+    suggestions: ["Current Period","Previous Period"]
+    type: string
+    case:  {
+
+      when:  {
+        sql: ${is_current_period} = true;;
+        label: "Current Period"
+      }
+
+      when: {
+        sql: ${is_previous_period} = true;;
+        label: "Previous Period"
+      }
+
+      else: "Not in time period"
+    }
+
+  }
+
+# /*MTD YTD QTD WTD*/
+
+  dimension: MTD {
+    label: "MTD"
+    type: yesno
+    sql: (EXTRACT(MONTH  FROM  ${rfrnc_dte_date}) = EXTRACT(MONTH FROM CURRENT_DATE())) ;;
+    }
+#     < EXTRACT(DAY FROM CURRENT_TIME()));;
+#                 OR
+#             (EXTRACT(DAY FROM ${rfrnc_dte_month}) = EXTRACT(DAY FROM CURRENT_TIMESTAMP()) AND
+#             EXTRACT(HOUR FROM ${rfrnc_dte_month}) < EXTRACT(HOUR FROM CURRENT_TIMESTAMP()))
+#                 OR
+#             (EXTRACT(DAY FROM ${rfrnc_dte_month}) = EXTRACT(DAY FROM CURRENT_TIMESTAMP()) AND
+#             EXTRACT(HOUR FROM ${rfrnc_dte_month}) <= EXTRACT(HOUR FROM CURRENT_TIMESTAMP()) AND
+#             EXTRACT(MINUTE FROM ${rfrnc_dte_month}) < EXTRACT(MINUTE FROM CURRENT_TIMESTAMP())))  ;;
+
+
+
+
   dimension_group: cim_week_end_dte {
     type: time
     timeframes: [
@@ -166,12 +316,21 @@ view: time_detail_cv {
       week,
       month,
       quarter,
-      year
+      year,
+      day_of_week,
+      day_of_week_index,
+      day_of_month,
+      day_of_year,
+      week_of_year,
+      month_name,
+      month_num
     ]
     convert_tz: no
     datatype: date
     sql: ${TABLE}.RFRNC_DTE ;;
   }
+
+
 
   dimension_group: row_add_stp {
     type: time
@@ -250,4 +409,8 @@ view: time_detail_cv {
     type: count
     drill_fields: []
   }
+
+
+
+
 }

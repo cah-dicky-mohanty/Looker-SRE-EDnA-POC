@@ -2,6 +2,7 @@ connection: "edna_non-prod"
 
 # include all the views
 include: "/views/**/*.view"
+include: "/common_views/**/rebate_table.view.lkml"
 
 # include explores
 # include: "/explores/SRE_Explore.explore.lkml"
@@ -13,10 +14,10 @@ datagroup: sre_poc_edna_default_datagroup {
 
 persist_with: sre_poc_edna_default_datagroup
 
-# access_grant: can_view_user_id_data {
-#   user_attribute: mapped_user_ids
-#   allowed_values: ["qc_oe_rpt2"]
-# }
+access_grant: can_view_user_id_data {
+  user_attribute: mapped_user_ids
+  allowed_values: ["qc_oe_rpt2"]
+}
 
 explore: SRE_Explore{
 
@@ -109,6 +110,14 @@ explore: SRE_Explore{
     relationship: many_to_one
   }
 
+join: rebate_table {
+  from: rebate_table
+  type: cross
+  relationship: many_to_many
+  sql_on: 1=1  ;;
+
+}
+
 
   access_filter: {
      field: time_detail_cv.rfrnc_dte_date
@@ -128,7 +137,7 @@ explore: SRE_Explore_2 {
     type: left_outer
     sql_on: ${account_user_rlt_cv.mrcry_user_id} = ${mercury_user_cv.mrcry_user_id} ;;
     relationship: many_to_one
-    fields: [mrcry_user_id, user_id]
+    fields: [mrcry_user_id, user_id, dynamic_user_id]
     sql_where: ${mercury_user_cv.user_id_active_flg} = 'Y'  ;;
   }
 
@@ -145,5 +154,10 @@ explore: SRE_Explore_2 {
     field: mercury_user_cv.user_id
     user_attribute: available_user_ids
   }
+
+}
+
+explore: rebate_table {
+  view_name: rebate_table
 
 }

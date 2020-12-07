@@ -2,6 +2,9 @@ view: mercury_user_cv {
   sql_table_name: `VI0_PHM_SDW_NP.MERCURY_USER_CV`
     ;;
 
+
+
+
   dimension: admin_flg {
     type: string
     sql: ${TABLE}.ADMIN_FLG ;;
@@ -199,8 +202,16 @@ view: mercury_user_cv {
   dimension: user_id {
     type: string
 #     required_access_grants: [can_view_user_id_data]
-    sql: ${TABLE}.USER_ID ;;
+    sql: Trim(${TABLE}.USER_ID) ;;
   }
+
+  dimension: dynamic_user_id {
+    type: string
+    sql: if(${user_id} = '{{_user_attributes['mapped_user_ids']}}' ,${user_id}, CAST(MD5(${user_id}) AS STRING)) ;;
+
+  }
+
+# {​​​​​{​​​​​ _user_attributes['name_of_attribute'] }​​​​​}​​​​​
 
   dimension: user_id_active_flg {
     type: string
@@ -215,5 +226,10 @@ view: mercury_user_cv {
   measure: count {
     type: count
     drill_fields: []
+  }
+
+  measure: user_id_count {
+    type: count
+    filters: [user_id_active_flg: "Y"]
   }
 }

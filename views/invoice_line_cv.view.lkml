@@ -1,8 +1,45 @@
+
 view: invoice_line_cv {
 sql_table_name: `VI0_PHM_SDW_NP.INVOICE_LINE_CV`;;
+
 #  sql_table_name: `datamarket-np-cah.PSDW.ARCH_PSDW_VIEWS_INVOICE_LINE` ;;
 
 
+
+  parameter: KPI_selector {
+    label: "KPI Selector"
+    type: unquoted
+    allowed_value: {
+      label: "SOURCE Purchases"
+      value: "source_purchases"
+    }
+    allowed_value: {
+      label: "Total Purchases"
+      value: "total_purchaes"
+    }
+    allowed_value: {
+      label: "Total Rx Purchases"
+      value: "total_rx_purchaes"
+    }
+  }
+
+
+  measure: KPI {
+    label: "KPI"
+    label_from_parameter: KPI_selector
+    type: number
+#     value_format: "$0.0,\"K\""
+    sql:
+    {% if KPI_selector._parameter_value == 'source_purchases' %}
+          ${SOURCE_Purchases}
+        {% elsif KPI_selector._parameter_value == 'total_purchaes' %}
+          ${Total_Purchases}
+        {% elsif KPI_selector._parameter_value == 'total_rx_purchaes' %}
+          ${Total_Rx_Purchases}
+        {% else %}
+           NULL
+        {% endif %} ;;
+    }
 
 
   dimension: cah_image {
@@ -20,17 +57,23 @@ sql_table_name: `VI0_PHM_SDW_NP.INVOICE_LINE_CV`;;
     sql:{%parameter Enter_SOURCE_Purchases %}  ;;
   }
 
+  measure: Rebate {
+    label: "Rebate"
+    type: number
+    sql: CASE WHEN ${SOURCE_Purchases} > ${rebate_table.low} THEN 1 ELSE 0 END ;;
+  }
+
+# CASE WHEN ${SOURCE_Purchases} > rebate_table.low THEN 1 ELSE 0 END ;;
   measure: SOURCE_Purchases {
     label: "SOURCE Purchases"
     type: sum
     sql: ${ext_sell_dlr} ;;
     filters: [
       cardinal_account_group_cv.Source_Contract: "Y",
-      product_cv.item_type_cde: "1,9,30",
-      product_cv.item_type_cde: "-24"
-
+      product_cv.item_type_cde: "1,9,30"
     ]
     #       pricing_segment.pricesegment_indicator: "Y"
+    #       product_cv.item_type_cde: "-24"
   }
 
   measure: Rebate_Inelig_SOURCE_Purchases {
