@@ -43,7 +43,7 @@ explore: SRE_Explore{
     view_label: "Time Detail"
     type: left_outer
     sql_on: ${invoice_line_cv.dte_key_num} = ${time_detail_cv.dte_key_num} ;;
-    relationship: many_to_one
+    relationship: many_to_many
   }
 
   join: contract_group_cv {
@@ -112,10 +112,9 @@ explore: SRE_Explore{
 
 join: rebate_table {
   from: rebate_table
-  type: cross
-  relationship: many_to_many
+  type: left_outer
   sql_on: 1=1  ;;
-
+  relationship: many_to_one
 }
 
 
@@ -154,10 +153,5 @@ explore: SRE_Explore_2 {
     field: mercury_user_cv.user_id
     user_attribute: available_user_ids
   }
-
-}
-
-explore: rebate_table {
-  view_name: rebate_table
 
 }

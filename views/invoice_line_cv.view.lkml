@@ -42,6 +42,19 @@ sql_table_name: `VI0_PHM_SDW_NP.INVOICE_LINE_CV`;;
     }
 
 
+  measure: KPIBox {
+    label: "KPIBox"
+    type: count
+    html:
+    <div style="border-radius: 10px; background-color: #d3363d; color: #fff;">
+        <div style="font-size: 4rem; display: inline-block;">{{ value }} (20%)</div>
+        <div style="display: inline-block;">
+        <p style="font-size: 1.5rem;"><strong>Your latest rebate status</strong></p>
+        <p style="font-size: 1.5rem;">(Next tier increases to 22%)</p>
+        </div>
+    </div> ;;
+  }
+
   dimension: cah_image {
     type: string
     sql: ${TABLE}.cah_image;;
