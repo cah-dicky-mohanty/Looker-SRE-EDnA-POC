@@ -43,7 +43,7 @@ explore: SRE_Explore{
     view_label: "Time Detail"
     type: left_outer
     sql_on: ${invoice_line_cv.dte_key_num} = ${time_detail_cv.dte_key_num} ;;
-    relationship: many_to_one
+    relationship: one_to_many
   }
 
   join: contract_group_cv {
