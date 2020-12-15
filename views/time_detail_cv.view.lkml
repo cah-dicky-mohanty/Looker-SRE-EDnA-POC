@@ -56,14 +56,8 @@ view: time_detail_cv {
         </div>
     </div> ;;
   }
-#     <div style="border-radius: 5px; background-color: #d3363d; color: #fff;">
-#         <div style="font-size: 4rem; display: inline-block;">{{ business_days_remaining._value }} days</div>
-#         <div style="display: inline-block;">
-#         <p style="font-size: 1.5rem;"><strong>Left to order in the month</strong></p>
-#         <p style="font-size: 1.5rem;">(out of {{ business_days._value }} purchasing days)</p>
-#         </div>
-#     </div> ;;
-#
+
+
 
 
   parameter: select_timeframe  {
