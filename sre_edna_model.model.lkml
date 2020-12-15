@@ -112,10 +112,9 @@ explore: SRE_Explore{
 
 join: rebate_table {
   from: rebate_table
-  type: cross
-  relationship: many_to_many
+  type: left_outer
   sql_on: 1=1  ;;
-
+  relationship: one_to_many
 }
 
 
@@ -154,10 +153,5 @@ explore: SRE_Explore_2 {
     field: mercury_user_cv.user_id
     user_attribute: available_user_ids
   }
-
-}
-
-explore: rebate_table {
-  view_name: rebate_table
 
 }

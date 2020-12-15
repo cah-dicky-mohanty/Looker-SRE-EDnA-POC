@@ -3,6 +3,63 @@ view: time_detail_cv {
     ;;
 
 
+  dimension: month_end {
+    type: date
+    sql: LAST_DAY(CURRENT_DATE, MONTH)  ;;
+  }
+
+
+  dimension: month_start {
+    type: date
+    sql: DATE_SUB(LAST_DAY(CURRENT_DATE, MONTH) + 1, INTERVAL 1 MONTH)  ;;
+  }
+
+  dimension: current_date  {
+    type: date
+    sql: CURRENT_DATE ;;
+  }
+
+  dimension: business_days  {
+    type: number
+    sql:
+     DATE_DIFF(${month_end}, ${month_start}, DAY) + 1 -
+     DATE_DIFF(${month_end}, DATE_ADD( ${month_start},INTERVAL 1 DAY), WEEK) -
+     DATE_DIFF(${month_end}, ${month_start}, WEEK)
+    ;;
+}
+
+  dimension: business_days_elapsed {
+    type: number
+    sql:
+     DATE_DIFF(${current_date}, ${month_start}, DAY)  -
+     DATE_DIFF(${current_date}, DATE_ADD( ${month_start},INTERVAL 1 DAY), WEEK) -
+     DATE_DIFF(${current_date}, ${month_start}, WEEK)
+    ;;
+  }
+
+
+  dimension: business_days_remaining {
+    type: number
+    sql:
+     ${business_days} -  ${business_days_elapsed}  ;;
+  }
+
+  measure: Days_Left_to_Order {
+    label: "Days Left to Order"
+    type: count
+    html:
+    <div style=" border-radius: 5px;width:380px;padding-left: 5px;background-color: #d3363d; color: #fff; ">
+    <div style="line-height: 90px; display:inline-block; font-size:25px; font-weight:bold;    /* border: solid 1px #000; */ height: 60px; text-align: left; margin: 0px; position: absolute !important; top: -17px !important; margin-top: -30px;">{{ business_days_remaining._value }} days</div>
+        <div style="display: inline-block;">
+        <p style="font-size: 1rem;"><strong>Left to order in the month</strong></p>
+        <p style="font-size: 1rem;">(out of {{ business_days._value }} purchasing days)</p>
+        </div>
+    </div> ;;
+  }
+
+
+
+
   parameter: select_timeframe  {
     type: unquoted
     allowed_value: { value: "Day" }
@@ -475,8 +532,5 @@ view: time_detail_cv {
     type: count
     drill_fields: []
   }
-
-
-
 
 }
