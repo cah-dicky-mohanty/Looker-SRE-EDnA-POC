@@ -42,8 +42,8 @@ sql_table_name: `VI0_PHM_SDW_NP.INVOICE_LINE_CV`;;
     }
 
 
-  measure: KPIBox {
-    label: "KPIBox"
+  measure: latest_rebate_status_KPI {
+    label: "Latest Rebate Status KPI"
     type: count
     html:
     <div style="border-radius: 10px; background-color: #d3363d; color: #fff;">
@@ -54,6 +54,33 @@ sql_table_name: `VI0_PHM_SDW_NP.INVOICE_LINE_CV`;;
         </div>
     </div> ;;
   }
+
+
+  measure: thermo {
+    type: count
+    html:
+    {% if value < 100 %}
+    <div class="vis" style="width: 400px; background-color: #808080; border: 2px solid #000;
+    border-radius: 15px; -moz-border-radius: 15px">
+
+    <div class="vis-single-value" style="background-color: red; font-color:white; width: 200px; border: 2px solid #000;
+    border-radius: 15px; -moz-border-radius: 15px;">{{ rendered_value }}</div></div>
+
+    {% elsif value >1000 %}
+     <div class="vis" style="width: 400px; background-color:#808080; border: 2px solid #000;
+    border-radius: 15px; -moz-border-radius: 15px">
+    <div class="vis-single-value" style="background-color: lightgreen; font-color:white; width: 300px;  border: 2px solid #000;
+    border-radius: 15px; -moz-border-radius: 15px;">{{ rendered_value }}
+    </div></div>
+    {% else %}
+     <div class="vis" style="width: 400px; background-color:  #808080; border: 2px solid #000;
+    border-radius: 15px; -moz-border-radius: 15px">
+    <div class="vis-single-value" style="background-color: black; font-color:white;  width: 400px;  border: 2px solid #000;
+    border-radius: 15px; -moz-border-radius: 15px;">{{ rendered_value }}
+    </div></div>
+    {% endif %};;
+  }
+
 
   dimension: cah_image {
     type: string
@@ -136,6 +163,11 @@ sql_table_name: `VI0_PHM_SDW_NP.INVOICE_LINE_CV`;;
     sql: ${product_cv.item_type_cde} in (1,9,24,30) /* Test */  ;;
   }
 
+  dimension: is_SPD_Purchases {
+    type: yesno
+    sql: ${product_cv.item_type_cde} in (24) /* Test */  ;;
+  }
+
   measure: SPX_Purchases {
     label: "SPX Purchases"
     type: sum
@@ -144,12 +176,11 @@ sql_table_name: `VI0_PHM_SDW_NP.INVOICE_LINE_CV`;;
 
       is_SPX_Purchases: "No",
       cost_of_goods_type_cv.cogs_type_id: "A,B,C,D,E,O",
-      invoice_line_cv.trnsct_type_key_num: "-3" ,
       product_cv.card_gen_ind_cde: "2",
       product_cv.fdb_ahfs_id: "10000000,20160000,92360000,8182000,8184016,8184020,8184024,8180804,8180808,8180812,8180816,8180820,92200000"
     ]
   }
-#   product.item_type_cde: "-1,-9,-24,-30",
+#   invoice_line_cv.trnsct_type_key_num: "-3" ,
 
 
 
@@ -158,7 +189,7 @@ sql_table_name: `VI0_PHM_SDW_NP.INVOICE_LINE_CV`;;
     type: sum
     sql: ${ext_sell_dlr} ;;
     filters: [
-      product_cv.item_type_cde: "-24",
+      is_SPD_Purchases: "No",
       order_entry_method_cv.order_entry_mthd_id: "4,9,J",
     ]
   }
@@ -174,6 +205,22 @@ sql_table_name: `VI0_PHM_SDW_NP.INVOICE_LINE_CV`;;
     type: number
     sql: ${SOURCE_Purchases} / ${Total_Rx_Purchases} ;;
   }
+
+  measure: SOURCE_to_Rx_Percent{
+    label: "SOURCE to Rx %"
+    type: number
+    sql: (${Total_Rx_Purchases}/${Total_Purchases})*100   ;;
+    value_format: "0.00\%"
+  }
+
+
+  measure: SOURCE_to_Rx_Percent_Less_SPX_SPD{
+    label: "SOURCE to Rx Less SPX/SPD %"
+    type: number
+    sql: ((${Total_Rx_Purchases})/(${Total_Purchases} - ${SPD_Purchases})) * 100   ;;
+    value_format: "0.00\%"
+  }
+
 
 
   dimension: acct_key_num {
