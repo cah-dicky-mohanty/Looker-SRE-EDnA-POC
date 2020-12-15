@@ -140,76 +140,7 @@ view: time_detail_cv {
     sql: CASE WHEN {% date_end date_filter %} IS NULL THEN CURRENT_DATE ELSE CAST({% date_end date_filter %} AS DATE) END;;
   }
 
-  dimension: month_end {
-    type: date
-    sql: LAST_DAY(CURRENT_DATE, MONTH)  ;;
-  }
 
-  dimension: month_start {
-    type: date
-    sql: DATE_SUB(LAST_DAY(CURRENT_DATE, MONTH) + 1, INTERVAL 1 MONTH)  ;;
-  }
-
-
-  dimension: current_date  {
-    type: date
-    sql: CURRENT_DATE ;;
-  }
-
-  dimension: business_days  {
-    type: number
-    sql:
-     DATE_DIFF(${month_end}, ${month_start}, DAY) + 1 -
-     DATE_DIFF(${month_end}, DATE_ADD( ${month_start},INTERVAL 1 DAY), WEEK) -
-     DATE_DIFF(${month_end}, ${month_start}, WEEK)
-    ;;
-  }
-
-  dimension: business_days_elapsed {
-    type: number
-    sql:
-     DATE_DIFF(${current_date}, ${month_start}, DAY)  -
-     DATE_DIFF(${current_date}, DATE_ADD( ${month_start},INTERVAL 1 DAY), WEEK) -
-     DATE_DIFF(${current_date}, ${month_start}, WEEK)
-    ;;
-  }
-
-  dimension: business_days_remaining {
-    type: number
-    sql:
-     ${business_days} -  ${business_days_elapsed}  ;;
-  }
-
-  measure: Test {
-    label: "Days Left to Order KPI"
-    type: count
-    html:
-    <div style="border-radius: 5px;width:380px;padding-left: 5px;background-color: #d3363d; color: #fff; ">
-    <div style="line-height: 90px; display:inline-block; font-size:25px; font-weight:bold;    /* border: solid 1px #000; */ height: 60px; text-align: left; margin: 0px; position: absolute !important; top: -17px !important; margin-top: -30px;">{{ business_days_remaining._value }} days</div>
-        <div style="display: inline-block;">
-        <p style="font-size: 1rem;"><strong>Left to order in the month</strong></p>
-        <p style="font-size: 1rem;">(out of {{ business_days._value }} purchasing days)</p>
-        </div>
-    </div> ;;
-  }
-
-
-  measure: ComplianceViz {
-    label: "Compliance Visualizations"
-    type: count
-    html:
-    <div style=" border-radius: 5px;width:600px;padding-left: 5px;background-color: #FFFFFF;">
-    <div style="color:#000;style= display:inline-block; font-size:20px; font-weight:bold; text-align: left;">Compliance<div style="text-align: right;">&#xFE19;</div>
-        <div style=" display:inline-block; font-size:15px;text-align: left;">Source divided by total RX minus specialty and dropship.<p style="font-size: 1rem;"></p>
-        <hr style="height:30px; width:450px;"></hr>
-        <p style="font-size: 1rem;">Current Month<br/>(out of {{ business_days._value }} purchasing days)</p><br/><br/><br/><br/>
-        <p style="font-size: 1rem;">Last Month<br/>(out of {{ business_days._value }} purchasing days)</p>
-        <hr style="height:10px; width:600px;"></hr>
-        <font color="green;"></font>
-        <p style="color: #D11818;font-size: 1rem;"><a href="url">View More Details</p></a>
-        </div>
-    </div> ;;
-  }
     dimension: interval {
     type: number
     sql: DATE_DIFF(${filter_start_date_raw}, ${filter_end_date_raw}, DAY);;
