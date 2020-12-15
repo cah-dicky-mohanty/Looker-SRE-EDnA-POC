@@ -58,6 +58,22 @@ view: time_detail_cv {
   }
 
 
+  measure: ComplianceViz {
+    label: "Compliance Visualizations"
+    type: count
+    html:
+    <div style=" border-radius: 5px;width:600px;padding-left: 5px;background-color: #FFFFFF;">
+    <div style="color:#000;style= display:inline-block; font-size:20px; font-weight:bold; text-align: left;">Compliance<div style="text-align: right;">&#xFE19;</div>
+        <div style=" display:inline-block; font-size:15px;text-align: left;">Source divided by total RX minus specialty and dropship.<p style="font-size: 1rem;"></p>
+        <hr style="height:30px; width:450px;"></hr>
+        <p style="font-size: 1rem;">Current Month<br/>(out of {{ business_days._value }} purchasing days)</p><br/><br/><br/><br/>
+        <p style="font-size: 1rem;">Last Month<br/>(out of {{ business_days._value }} purchasing days)</p>
+        <hr style="height:10px; width:600px;"></hr>
+        <font color="green;"></font>
+        <p style="color: #D11818;font-size: 1rem;"><a href="url">View More Details</p></a>
+        </div>
+    </div> ;;
+  }
 
 
   parameter: select_timeframe  {
