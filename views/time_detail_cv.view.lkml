@@ -18,6 +18,10 @@ view: time_detail_cv {
     type: date
     sql: CURRENT_DATE ;;
   }
+  dimension: previous_month  {
+    type: date
+    sql: DATE_SUB((CURRENT_DATE) , INTERVAL 1 MONTH);;
+  }
 
   dimension: business_days  {
     type: number
@@ -64,12 +68,13 @@ view: time_detail_cv {
     html:
     <div style=" border-radius: 5px;width:600px;padding-left: 5px;background-color: #FFFFFF;">
     <div style="color:#000;style= display:inline-block; font-size:20px; font-weight:bold; text-align: left;">Compliance<div style="text-align: right;">&#xFE19;</div>
-        <div style=" display:inline-block; font-size:15px;text-align: left;">Source divided by total RX minus specialty and dropship.<p style="font-size: 1rem;"></p>
-        <hr style="height:30px; width:450px;"></hr>
-        <p style="font-size: 1rem;">Current Month<br/>(out of {{ business_days._value }} purchasing days)</p><br/><br/><br/><br/>
-        <p style="font-size: 1rem;">Last Month<br/>(out of {{ business_days._value }} purchasing days)</p>
+        <div style=" display:inline-block; font-size:15px;text-align: left;">SOURCE divided by total Rx minus specialty and dropship.
         <hr style="height:10px; width:600px;"></hr>
-        <font color="green;"></font>
+        <p style="font-size: 1rem;">Current Month as of <br/> {{current_date._value}} (out of {{ business_days_remaining._value }} purchasing days) </p></br></br>{{invoice_line_cv.SOURCE_to_Rx_Percent}} % SOURCE to Rx
+
+        <br/><br/>{{invoice_line_cv.SOURCE_to_Rx_Percent_Less_SPX_SPD}} % Less SPX/SPD<br/><br/>
+        <p style="font-size: 1rem;">Last Month as of <br/> {{previous_month}} (out of {{ business_days_remaining._value }} purchasing days)</p> </br> {{invoice_line_cv.Total_Purchases}} SOURCE to Rx</p><br/><br/>{{invoice_line_cv.Total_Rx_Purchases}} Less SPX/SPD<br/><br/>
+        <hr style="height:10px; width:600px;"></hr>
         <p style="color: #D11818;font-size: 1rem;"><a href="url">View More Details</p></a>
         </div>
     </div> ;;
@@ -340,6 +345,7 @@ view: time_detail_cv {
 
   dimension: dte_key_num {
     type: number
+    primary_key: yes
     sql: ${TABLE}.DTE_KEY_NUM ;;
   }
 
