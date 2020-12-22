@@ -147,7 +147,7 @@ sql_table_name: `VI0_PHM_SDW_NP.INVOICE_LINE_CV`;;
 
   measure: Total_Purchases {
     type: sum
-    sql: ${ext_sell_dlr} ;;
+    sql:${ext_sell_dlr} ;;
   }
 
   measure: Total_Rx_Purchases {
