@@ -268,7 +268,7 @@ dimension: is_last_12_months {
   }
 
   measure: total_brand {
-    label: "Total Generic"
+    label: "Total Brand"
     type: sum
     sql: ${ext_sell_dlr} ;;
     filters: [
