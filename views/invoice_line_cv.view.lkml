@@ -322,7 +322,7 @@ dimension: is_last_12_months {
   measure: SOURCE_to_Rx_Percent{
     label: "SOURCE to Rx %"
     type: number
-    sql: (${Total_Rx_Purchases}/${Total_Purchases})*100   ;;
+    sql: ROUND((${Total_Rx_Purchases}/${Total_Purchases})*100, 2)   ;;
     value_format: "0.00\%"
   }
 
@@ -330,7 +330,7 @@ dimension: is_last_12_months {
   measure: SOURCE_to_Rx_Percent_Less_SPX_SPD{
     label: "SOURCE to Rx Less SPX/SPD %"
     type: number
-    sql: ((${Total_Rx_Purchases})/(${Total_Purchases} - ${SPD_Purchases})) * 100   ;;
+    sql: ROUND(((${Total_Rx_Purchases})/(${Total_Purchases} - ${SPD_Purchases})) * 100, 2)   ;;
     value_format: "0.00\%"
   }
 
