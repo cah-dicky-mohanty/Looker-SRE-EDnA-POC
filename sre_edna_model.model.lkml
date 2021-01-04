@@ -2,7 +2,7 @@ connection: "edna_non-prod"
 
 # include all the views
 include: "/views/**/*.view"
-include: "/common_views/**/rebate_table.view.lkml"
+# include: "/common_views/**/rebate_table.view.lkml"
 
 # include explores
 # include: "/explores/SRE_Explore.explore.lkml"
@@ -22,12 +22,15 @@ access_grant: can_view_user_id_data {
 explore: SRE_Explore{
 
 
-  view_name: invoice_line_cv
+  view_name: invoice_line_cv {
   view_label: "Invoice Line"
+  sql_always_where: ${is_last_12_months}
+  ;;
+}
+#  ${invoice_line_cv.dte_key_num} >= ${invoice_line_cv.last_12_month_dte_key_num}
 #   always_filter: {
-#     filters: [time_detail_cv.rfrnc_dte_date: "2020-06-01"]
-#   }
-
+#   filters: [invoice_line_cv.dte_key_num: "": "2020-06-01"]
+#   sql_always_where: ${invoice_line_cv.dte_key_num} > ${invoice_line_cv.last_12_month_dte_key_num} ;;
 
   join:  ship_to_account_cv{
     view_label: "Ship To Account"
@@ -44,6 +47,7 @@ explore: SRE_Explore{
     type: left_outer
     sql_on: ${invoice_line_cv.dte_key_num} = ${time_detail_cv.dte_key_num} ;;
     relationship: many_to_one
+
   }
 
   join: contract_group_cv {
@@ -82,7 +86,7 @@ explore: SRE_Explore{
     view_label: "Product"
     type: left_outer
     sql_on: ${invoice_line_cv.prod_key_num} = ${product_cv.prod_key_num};;
-    fields: [prod_key_num, corp_item_num, ndc_cde,gen_nam, item_type_cde,rx_indicator,card_gen_ind_cde,fdb_ahfs_id]
+    fields: [prod_key_num, corp_item_num, ndc_cde,gen_nam, item_type_cde,rx_indicator,card_gen_ind_cde,card_gen_ind_desc,fdb_ahfs_id]
     relationship: many_to_one
   }
 
@@ -110,13 +114,13 @@ explore: SRE_Explore{
     relationship: many_to_one
   }
 
-join: rebate_table {
-  from: rebate_table
+# always_join: [aap_rebate_table]
+join: aap_rebate_table {
   type: left_outer
-  sql_on: 1=1  ;;
-  relationship: one_to_many
+  relationship: many_to_one
+  sql_on: 1=1;;
 }
-
+# ${invoice_line_cv.SOURCE_Purchases} BETWEEN ${aap_rebate_table.aap_rebate_spend_low_bound} AND ${aap_rebate_table.aap_rebate_spend_high_bound}
 
   access_filter: {
      field: time_detail_cv.rfrnc_dte_date

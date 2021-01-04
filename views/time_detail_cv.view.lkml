@@ -3,6 +3,7 @@ view: time_detail_cv {
     ;;
 
 
+
   dimension: month_end {
     type: date
     sql: LAST_DAY(CURRENT_DATE, MONTH)  ;;
@@ -46,7 +47,8 @@ view: time_detail_cv {
 
   measure: Days_Left_to_Order {
     label: "Days Left to Order"
-    type: count
+    type: number
+    sql: max(0) ;;
     html:
     <div style=" border-radius: 5px;width:380px;padding-left: 5px;background-color: #d3363d; color: #fff; ">
     <div style="line-height: 90px; display:inline-block; font-size:25px; font-weight:bold;    /* border: solid 1px #000; */ height: 60px; text-align: left; margin: 0px; position: absolute !important; top: -17px !important; margin-top: -30px;">{{ business_days_remaining._value }} days</div>
@@ -343,6 +345,7 @@ view: time_detail_cv {
 
   dimension: dte_key_num {
     type: number
+    primary_key: yes
     sql: ${TABLE}.DTE_KEY_NUM ;;
   }
 

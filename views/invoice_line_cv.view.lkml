@@ -4,8 +4,39 @@ sql_table_name: `VI0_PHM_SDW_NP.INVOICE_LINE_CV`;;
 
 #  sql_table_name: `datamarket-np-cah.PSDW.ARCH_PSDW_VIEWS_INVOICE_LINE` ;;
 
+  dimension: last_12_month_date {
+    type: date
+    sql: DATE_SUB((CURRENT_DATE) , INTERVAL 12 MONTH);;
+  }
+
+  dimension: last_12_month_dte_key_num {
+    type: number
+    sql: CASE WHEN ${last_12_month_date} = ${time_detail_cv.rfrnc_dte_date}  THEN ${dte_key_num} END ;;
+  }
 
 
+dimension: is_last_12_months {
+  type: yesno
+  sql:  ${time_detail_cv.rfrnc_dte_date} >= ${last_12_month_date}
+   ;;
+  }
+
+  measure: needed_for_next_tier {
+    label: "Needed for Next Tier"
+    type: number
+    sql:  CASE WHEN
+    ${invoice_line_cv.SOURCE_Purchases}/${time_detail_cv.business_days_elapsed} * ${time_detail_cv.business_days} >= ${aap_rebate_table.aap_rebate_spend_low_bound}
+    AND
+    ${invoice_line_cv.SOURCE_Purchases}/${time_detail_cv.business_days_elapsed} * ${time_detail_cv.business_days} <= ${aap_rebate_table.aap_rebate_spend_high_bound}
+    THEN
+    ${aap_rebate_table.aap_rebate_spend_high_bound} - ${invoice_line_cv.SOURCE_Purchases}/${time_detail_cv.business_days_elapsed} * ${time_detail_cv.business_days}
+    ELSE Null
+    END
+      ;;
+  }
+
+
+# ${aap_rebate_table.spend_low_bound}
   parameter: KPI_selector {
     label: "KPI Selector"
     type: unquoted
@@ -56,9 +87,29 @@ sql_table_name: `VI0_PHM_SDW_NP.INVOICE_LINE_CV`;;
   }
 
 
-  measure: thermo {
+  measure: volume_breakdown_visualization_arb883 {
+    label: "Volume Breakdown Visualization"
     type: count
     html:
+    <div style=" border-radius: 5px;width:600px;padding-left: 5px;background-color: #FFFFFF;">
+    <div style="color:#000;style= display:inline-block; font-size:20px; font-weight:bold; text-align: left;">Volume Breakdown<div style="text-align: right;">&#xFE19;</div>
+    <div style="display:inline-block; font-size:10px;text-align: left;">The latest information and details for your overall purchase volume.<p style="font-size: 0rem;"></p>
+
+        </div>
+    </div> ;;
+  }
+# <hr style="height:30px; width:450px;"></hr>
+#         <p style="font-size: 1rem;">Current Month<br/>(out of {{ business_days._value }} purchasing days)</p><br/><br/><br/><br/>
+#         <p style="font-size: 1rem;">Last Month<br/>(out of {{ business_days._value }} purchasing days)</p>
+#         <hr style="height:10px; width:600px;"></hr>
+#         <font color="green;"></font>
+#         <p style="color: #D11818;font-size: 1rem;"><a href="url">View More Details</p></a>
+
+  measure: thermo {
+    label: "Thermo"
+    type: count
+    html:
+
     {% if value < 100 %}
     <div class="vis" style="width: 400px; background-color: #808080; border: 2px solid #000;
     border-radius: 15px; -moz-border-radius: 15px">
@@ -78,7 +129,11 @@ sql_table_name: `VI0_PHM_SDW_NP.INVOICE_LINE_CV`;;
     <div class="vis-single-value" style="background-color: black; font-color:white;  width: 400px;  border: 2px solid #000;
     border-radius: 15px; -moz-border-radius: 15px;">{{ rendered_value }}
     </div></div>
-    {% endif %};;
+    {% endif %}
+
+
+
+  ;;
   }
 
 
@@ -97,11 +152,7 @@ sql_table_name: `VI0_PHM_SDW_NP.INVOICE_LINE_CV`;;
     sql:{%parameter Enter_SOURCE_Purchases %}  ;;
   }
 
-  measure: Rebate {
-    label: "Rebate"
-    type: number
-    sql: CASE WHEN ${SOURCE_Purchases} > ${rebate_table.low} THEN 1 ELSE 0 END ;;
-  }
+
 
 # CASE WHEN ${SOURCE_Purchases} > rebate_table.low THEN 1 ELSE 0 END ;;
   measure: SOURCE_Purchases {
@@ -146,11 +197,13 @@ sql_table_name: `VI0_PHM_SDW_NP.INVOICE_LINE_CV`;;
 
 
   measure: Total_Purchases {
+    label: "Total Sales"
     type: sum
     sql: ${ext_sell_dlr} ;;
   }
 
   measure: Total_Rx_Purchases {
+    label: "Total Rx"
     type: sum
     sql: ${ext_sell_dlr} ;;
     filters: [
@@ -194,6 +247,66 @@ sql_table_name: `VI0_PHM_SDW_NP.INVOICE_LINE_CV`;;
     ]
   }
 
+
+  measure: dropship {
+    label: "Dropship"
+    type: sum
+    sql: ${ext_sell_dlr} ;;
+    filters: [
+     invoice_line_cv.trnsct_type_key_num: "3"
+    ]
+  }
+
+
+  measure: total_generic {
+    label: "Total Generic"
+    type: sum
+    sql: ${ext_sell_dlr} ;;
+    filters: [
+      product_cv.card_gen_ind_desc: "GENERIC DRUG"
+    ]
+  }
+
+  measure: total_brand {
+    label: "Total Generic"
+    type: sum
+    sql: ${ext_sell_dlr} ;;
+    filters: [
+      product_cv.card_gen_ind_desc: "BRANDED DRUG"
+    ]
+  }
+
+  measure: generic_rx {
+    label: "Generic Rx"
+    type: sum
+    sql: ${ext_sell_dlr} ;;
+    filters: [
+      product_cv.card_gen_ind_desc: "GENERIC DRUG",
+      product_cv.rx_indicator: "Rx"
+    ]
+  }
+
+  measure: brand_rx {
+    label: "Brand Rx"
+    type: sum
+    sql: ${ext_sell_dlr} ;;
+    filters: [
+      product_cv.card_gen_ind_desc: "BRANDED DRUG",
+      product_cv.rx_indicator: "Rx"
+    ]
+  }
+
+  measure: specialty_rx {
+    label: "Specialty Rx"
+    type: sum
+    sql: ${ext_sell_dlr} ;;
+    filters: [
+      order_entry_method_cv.order_entry_mthd_desc: "ORDERING - SPD , SPDPASSTHRU",
+      product_cv.rx_indicator: "Rx"
+    ]
+  }
+
+
   measure: SOURCE_Total {
     label: "SOURCE/Total"
     type: number
@@ -225,6 +338,7 @@ sql_table_name: `VI0_PHM_SDW_NP.INVOICE_LINE_CV`;;
 
   dimension: acct_key_num {
     type: number
+    primary_key: yes
     sql: ${TABLE}.ACCT_KEY_NUM ;;
   }
 
