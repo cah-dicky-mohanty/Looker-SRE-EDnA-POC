@@ -21,6 +21,12 @@ access_grant: can_view_user_id_data {
 
 explore: SRE_Explore{
 
+#   always_filter: {
+#     filters: [ship_to_account_cv.ship_to_location_num: "24",
+#       ship_to_account_cv.ship_to_customer_num: "464452"]
+#     filters: [invoice_line_cv.acct_key_num: "13228328"]
+#   }
+
 
   view_name: invoice_line_cv {
   view_label: "Invoice Line"
@@ -94,7 +100,7 @@ explore: SRE_Explore{
     view_label: "Product"
     type: left_outer
     sql_on: ${invoice_line_cv.prod_key_num} = ${product_cv.prod_key_num};;
-    fields: [prod_key_num, corp_item_num, ndc_cde,gen_nam,trade_nam ,prod_nam,item_type_cde,rx_indicator,card_gen_ind_cde,card_gen_ind_desc,fdb_ahfs_id,size_txt, pack_size_qty, pack_qty,strgth_txt,total_qty]
+    fields: [prod_key_num, corp_item_num, ndc_cde,gen_nam,trade_nam ,prod_nam,item_type_cde,rx_indicator,card_gen_ind_cde,card_gen_ind_desc,fdb_ahfs_id,size_txt, pack_size_qty, pack_qty,strgth_txt,total_qty,supplier_nam]
     relationship: many_to_one
   }
 
