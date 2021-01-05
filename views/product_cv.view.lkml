@@ -792,6 +792,7 @@ view: product_cv {
 
   dimension: prod_key_num {
     type: number
+    primary_key: yes
     sql: ${TABLE}.PROD_KEY_NUM ;;
   }
 

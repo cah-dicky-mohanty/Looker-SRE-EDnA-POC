@@ -3,6 +3,14 @@ view: time_detail_cv {
     ;;
 
 
+  dimension: order_dte {
+    alias: [rfrnc_dte]
+    type: date
+    datatype: date
+    sql: ${TABLE}.RFRNC_DTE ;;
+  }
+
+
   dimension: month_end {
     type: date
     sql: LAST_DAY(CURRENT_DATE, MONTH)  ;;
@@ -48,9 +56,35 @@ view: time_detail_cv {
      ${business_days} -  ${business_days_elapsed}  ;;
   }
 
+  dimension: previous_month_date  {
+    type: date
+    sql: DATE_SUB((CURRENT_DATE) , INTERVAL 1 MONTH);;
+  }
+
+  dimension: previous_month_end {
+    type: date
+    sql: LAST_DAY(${previous_month_date}, MONTH)  ;;
+  }
+
+  dimension: previous_month_start {
+    type: date
+    sql: DATE_SUB(LAST_DAY(${previous_month_date}, MONTH) + 1, INTERVAL 1 MONTH)  ;;
+  }
+
+  dimension: previous_month_business_days {
+    type:number
+    sql:
+      DATE_DIFF(${previous_month_end}, ${previous_month_start}, DAY) + 1 -
+      DATE_DIFF(${previous_month_end}, DATE_ADD( ${previous_month_start},INTERVAL 1 DAY), WEEK) -
+      DATE_DIFF(${previous_month_end}, ${previous_month_start}, WEEK)
+    ;;
+  }
+
+
   measure: Days_Left_to_Order {
     label: "Days Left to Order"
-    type: count
+    type: number
+    sql: max(0) ;;
     html:
     <div style=" border-radius: 5px;width:380px;padding-left: 5px;background-color: #d3363d; color: #fff; ">
     <div style="line-height: 90px; display:inline-block; font-size:25px; font-weight:bold;    /* border: solid 1px #000; */ height: 60px; text-align: left; margin: 0px; position: absolute !important; top: -17px !important; margin-top: -30px;">{{ business_days_remaining._value }} days</div>

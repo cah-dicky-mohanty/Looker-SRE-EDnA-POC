@@ -30,6 +30,7 @@ view: ship_to_account_cv {
 
   dimension: acct_key_num {
     type: number
+    primary_key: yes
     sql: ${TABLE}.ACCT_KEY_NUM ;;
   }
 
