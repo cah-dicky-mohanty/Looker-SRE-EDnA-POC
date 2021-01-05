@@ -81,6 +81,21 @@ view: time_detail_cv {
   }
 
 
+  measure: Off_Contract {
+    label: "Off Contract Purchases List"
+    type: count
+    html:
+    <div style=" border-radius: 5px;width:600px;padding-left: 5px;background-color: #FFFFFF;">
+    <div style="color:#000;style= display:inline-block; font-size:20px; font-weight:bold; text-align: left;">Off Contract Purchases<div style="text-align: right;">&#xFE19;</div>
+        <div style=" display:inline-block; font-size:15px;text-align: left;">Purchases made when a SOURCE product was available.
+        <hr style="height:1px; width:600px;"></hr>
+        <br/>Mfg: {{product_cv.supplier_nam}}<br/>NDC: {{product_cv.ndc_cde}} <br/> Product: {{product_cv.prod_nam}}</br> Qty: {{product_cv.total_qty}}</br> net cost: {{invoice_line_cv.ext_invoice_dlr}}</br>
+        Ordered date: {{invoice_line_cv.order_dte_key_num}}</br>
+        <p style="color: #D11818;font-size: 1rem;"><a href="url">View More Details</p></a>
+        </div>
+    </div> ;;
+  }
+
   parameter: select_timeframe  {
     type: unquoted
     allowed_value: { value: "Day" }

@@ -82,8 +82,8 @@ explore: SRE_Explore{
     view_label: "Product"
     type: left_outer
     sql_on: ${invoice_line_cv.prod_key_num} = ${product_cv.prod_key_num};;
-    fields: [prod_key_num, corp_item_num, ndc_cde,gen_nam, item_type_cde,rx_indicator,card_gen_ind_cde,fdb_ahfs_id]
-    relationship: many_to_one
+    fields: [prod_key_num, prod_nam,supplier_nam,total_qty,corp_item_num, ndc_cde,gen_nam, item_type_cde,rx_indicator,card_gen_ind_cde,fdb_ahfs_id]
+    relationship: one_to_many
   }
 
   join: product_program_rlt_cv  {
