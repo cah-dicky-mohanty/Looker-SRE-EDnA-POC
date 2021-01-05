@@ -47,7 +47,15 @@ explore: SRE_Explore{
     type: left_outer
     sql_on: ${invoice_line_cv.dte_key_num} = ${time_detail_cv.dte_key_num} ;;
     relationship: many_to_one
+  }
 
+  join: order_date {
+    from: time_detail_cv
+    view_label: "Order Detail"
+    type: left_outer
+    sql_on: ${invoice_line_cv.order_dte_key_num} = ${order_date.dte_key_num} ;;
+    relationship: many_to_one
+    fields: [order_dte]
   }
 
   join: contract_group_cv {

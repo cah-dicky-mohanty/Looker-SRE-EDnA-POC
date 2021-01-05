@@ -3,6 +3,13 @@ view: time_detail_cv {
     ;;
 
 
+  dimension: order_dte {
+    alias: [rfrnc_dte]
+    type: date
+    datatype: date
+    sql: ${TABLE}.RFRNC_DTE ;;
+  }
+
 
   dimension: month_end {
     type: date
