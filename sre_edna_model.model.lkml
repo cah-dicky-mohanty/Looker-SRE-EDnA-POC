@@ -94,13 +94,8 @@ explore: SRE_Explore{
     view_label: "Product"
     type: left_outer
     sql_on: ${invoice_line_cv.prod_key_num} = ${product_cv.prod_key_num};;
-<<<<<<< HEAD
-    fields: [prod_key_num, prod_nam,supplier_nam,total_qty,corp_item_num, ndc_cde,gen_nam, item_type_cde,rx_indicator,card_gen_ind_cde,fdb_ahfs_id]
-    relationship: one_to_many
-=======
-    fields: [prod_key_num, corp_item_num, ndc_cde,gen_nam,trade_nam ,prod_nam,item_type_cde,rx_indicator,card_gen_ind_cde,card_gen_ind_desc,fdb_ahfs_id,size_txt, pack_size_qty, pack_qty,strgth_txt,total_qty]
+    fields: [prod_key_num, corp_item_num, ndc_cde,gen_nam,trade_nam ,prod_nam,item_type_cde,rx_indicator,card_gen_ind_cde,card_gen_ind_desc,fdb_ahfs_id,size_txt, pack_size_qty, pack_qty,strgth_txt,total_qty,supplier_nam]
     relationship: many_to_one
->>>>>>> branch 'master' of https://github.com/cah-dicky-mohanty/Looker-SRE-EDnA-POC.git
   }
 
   join: product_program_rlt_cv  {

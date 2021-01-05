@@ -322,11 +322,7 @@ dimension: is_last_12_months {
   measure: SOURCE_to_Rx_Percent{
     label: "SOURCE to Rx %"
     type: number
-<<<<<<< HEAD
-    sql: Round((${Total_Rx_Purchases}/${Total_Purchases}),4)*100   ;;
-=======
     sql: ROUND((${Total_Rx_Purchases}/${Total_Purchases})*100, 2)   ;;
->>>>>>> branch 'master' of https://github.com/cah-dicky-mohanty/Looker-SRE-EDnA-POC.git
     value_format: "0.00\%"
   }
 
@@ -334,11 +330,7 @@ dimension: is_last_12_months {
   measure: SOURCE_to_Rx_Percent_Less_SPX_SPD{
     label: "SOURCE to Rx Less SPX/SPD %"
     type: number
-<<<<<<< HEAD
-    sql: Round(((${Total_Rx_Purchases})/(${Total_Purchases} - ${SPD_Purchases})),4) * 100   ;;
-=======
     sql: ROUND(((${Total_Rx_Purchases})/(${Total_Purchases} - ${SPD_Purchases})) * 100, 2)   ;;
->>>>>>> branch 'master' of https://github.com/cah-dicky-mohanty/Looker-SRE-EDnA-POC.git
     value_format: "0.00\%"
   }
 
