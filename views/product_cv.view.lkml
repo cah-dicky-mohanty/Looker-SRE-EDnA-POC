@@ -110,7 +110,7 @@ view: product_cv {
 
   dimension: card_gen_ind_desc {
     type: string
-    sql: ${TABLE}.CARD_GEN_IND_DESC ;;
+    sql: TRIM(${TABLE}.CARD_GEN_IND_DESC) ;;
   }
 
   dimension: card_gppc_id {
