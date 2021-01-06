@@ -90,7 +90,7 @@ view: order_entry_method_cv {
 
   dimension: order_entry_mthd_desc {
     type: string
-    sql: ${TABLE}.order_entry_mthd_desc ;;
+    sql: TRIM(${TABLE}.order_entry_mthd_desc) ;;
   }
 
   dimension: order_entry_mthd_id {

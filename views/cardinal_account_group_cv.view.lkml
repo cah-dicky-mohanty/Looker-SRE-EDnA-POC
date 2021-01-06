@@ -2,9 +2,9 @@ view: cardinal_account_group_cv {
   sql_table_name: `VI0_PHM_SDW_NP.CARDINAL_ACCOUNT_GROUP_CV`
     ;;
 
-  dimension: Source_Contract{
+  dimension: source_contract{
     type: string
-    sql: CASE WHEN ${afltn_num} in (779,998)  THEN 'Y' ELSE 'N' END   ;;
+    sql: CASE WHEN ${afltn_num} in (779 , 998)  THEN 'Y' ELSE 'N' END   ;;
   }
 
 
