@@ -160,7 +160,7 @@ dimension: is_last_12_months {
     type: sum
     sql: ${ext_sell_dlr} ;;
     filters: [
-      cardinal_account_group_cv.Source_Contract: "Y",
+      cardinal_account_group_cv.source_contract: "Y",
       product_cv.item_type_cde: "1,9,30"
     ]
     #       pricing_segment.pricesegment_indicator: "Y"
@@ -172,7 +172,7 @@ dimension: is_last_12_months {
     type: sum
     sql: ${ext_sell_dlr} ;;
     filters: [
-      cardinal_account_group_cv.Source_Contract: "Y",
+      cardinal_account_group_cv.source_contract: "Y",
       override_type_cv.ovrd_type_id: "I"
     ]
 #     product_program_rlt.spd_indicator: "No"
@@ -305,6 +305,7 @@ dimension: is_last_12_months {
       product_cv.rx_indicator: "Rx"
     ]
   }
+
 
 
   measure: SOURCE_Total {

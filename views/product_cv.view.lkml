@@ -8,6 +8,26 @@ view: product_cv {
     sql: case when ${prod_type_cde} = 6 then 'Rx' else 'Non-Rx' end;;
   }
 
+
+  dimension: volume_breakdown_kpis {
+    label: "Volume Breakdown KPIs"
+    type: string
+    sql:  CASE
+          WHEN TRIM(${product_cv.card_gen_ind_desc}) = 'GENERIC DRUG' and
+          ${product_cv.rx_indicator} = 'Rx' THEN 'Generic Rx'
+          WHEN TRIM(${product_cv.card_gen_ind_desc}) = 'BRANDED DRUG' and
+          ${product_cv.rx_indicator} = 'Rx' THEN 'Brand Rx'
+          WHEN TRIM(${order_entry_method_cv.order_entry_mthd_desc}) in ('ORDERING - SPD' , 'SPDPASSTHRU') and
+          ${product_cv.rx_indicator} = 'Rx' THEN 'Specialty Rx'
+          WHEN TRIM(${cardinal_account_group_cv.source_contract}) = 'Y' and
+          ${product_cv.item_type_cde} in (1,9,30) THEN 'Total SOURCE'
+          ELSE 'Others'
+          END
+          ;;
+  }
+# ${cardinal_account_group_cv.source_contract} = 'Y' and
+
+
   dimension: accunet_qty {
     type: number
     sql: ${TABLE}.ACCUNET_QTY ;;
@@ -90,7 +110,7 @@ view: product_cv {
 
   dimension: card_gen_ind_desc {
     type: string
-    sql: ${TABLE}.CARD_GEN_IND_DESC ;;
+    sql: TRIM(${TABLE}.CARD_GEN_IND_DESC) ;;
   }
 
   dimension: card_gppc_id {
@@ -798,7 +818,7 @@ view: product_cv {
 
   dimension: prod_nam {
     type: string
-    sql: ${TABLE}.PROD_NAM ;;
+    sql: TRIM(${TABLE}.PROD_NAM) ;;
   }
 
   dimension: prod_type_cde {
@@ -1086,7 +1106,7 @@ view: product_cv {
 
   dimension: supplier_nam {
     type: string
-    sql: ${TABLE}.SUPPLIER_NAM ;;
+    sql: TRIM(${TABLE}.SUPPLIER_NAM) ;;
   }
 
   dimension: supplier_nlc_type_cde {
