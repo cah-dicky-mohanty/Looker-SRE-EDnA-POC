@@ -123,7 +123,7 @@ view: time_detail_cv {
     <div style="color:#000;style= display:inline-block; font-size:20px; font-weight:bold; text-align: left;">Off Contract Purchases<div style="text-align: right;">&#xFE19;</div>
         <div style=" display:inline-block; font-size:15px;text-align: left;">Purchases made when a SOURCE product was available.
         <hr style="height:1px; width:600px;"></hr>
-        <br/>Mfg: {{product_cv.supplier_nam}}<br/>NDC: {{product_cv.ndc_cde}} <br/> Product: {{product_cv.prod_nam}}</br> Qty: {{product_cv.pack_size_qty}}</br> net cost: {{invoice_line_cv.ext_invoice_dlr}}</br>
+        <br/>Mfg: {{product_cv.supplier_nam}}<br/>NDC: {{product_cv.ndc_cde}} <br/> Product: {{product_cv.prod_nam}}</br> Qty: {{product_cv.pack_size_qty}}</br> net cost: {{invoice_line_cv.ext_sell_dlr}}</br>
         Ordered date: {{order_date.order_dte}}</br>  Frequency: </br></br>  missed savings: </br>
         <p style="color: #D11818;font-size: 1rem;"><a href="url">View More Details</p></a>
         </div>
