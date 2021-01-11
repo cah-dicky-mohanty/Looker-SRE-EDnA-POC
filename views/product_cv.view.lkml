@@ -818,7 +818,7 @@ view: product_cv {
 
   dimension: prod_nam {
     type: string
-    sql: ${TABLE}.PROD_NAM ;;
+    sql: TRIM(${TABLE}.PROD_NAM) ;;
   }
 
   dimension: prod_type_cde {
@@ -1106,7 +1106,7 @@ view: product_cv {
 
   dimension: supplier_nam {
     type: string
-    sql: ${TABLE}.SUPPLIER_NAM ;;
+    sql: TRIM(${TABLE}.SUPPLIER_NAM) ;;
   }
 
   dimension: supplier_nlc_type_cde {

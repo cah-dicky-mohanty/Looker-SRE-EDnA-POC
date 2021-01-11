@@ -21,6 +21,12 @@ access_grant: can_view_user_id_data {
 
 explore: SRE_Explore{
 
+#   always_filter: {
+#     filters: [ship_to_account_cv.ship_to_location_num: "24",
+#       ship_to_account_cv.ship_to_customer_num: "464452"]
+#     filters: [invoice_line_cv.acct_key_num: "13228328"]
+#   }
+
 
   view_name: invoice_line_cv {
   view_label: "Invoice Line"
