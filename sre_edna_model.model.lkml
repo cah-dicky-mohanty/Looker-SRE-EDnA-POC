@@ -24,7 +24,9 @@ explore: SRE_Explore{
 
   view_name: invoice_line_cv {
   view_label: "Invoice Line"
-  sql_always_where: ${is_last_12_months}
+  sql_always_where: ${is_last_12_months} and
+  ${ship_to_account_cv.ship_to_customer_num} = 464452
+
   ;;
 }
 #  ${invoice_line_cv.dte_key_num} >= ${invoice_line_cv.last_12_month_dte_key_num}
@@ -37,11 +39,12 @@ explore: SRE_Explore{
     type: left_outer
     sql_on: ${invoice_line_cv.acct_key_num} = ${ship_to_account_cv.acct_key_num} ;;
     relationship: many_to_one
-    fields: [ship_to_customer_num, ship_to_location_num, acct_key_num,account_name_selector]
+    fields: [ship_to_customer_num, ship_to_location_num, acct_key_num,account_selector, account_name_selector]
     sql_where: ${invoice_line_cv.corp_acct_key_num} = 1  and
-      ${ship_to_account_cv.curr_vrsn_flg} = 'Y' ;;
+      ${ship_to_account_cv.curr_vrsn_flg} = 'Y'
+      ;;
   }
-
+# , 24-464452'  ${ship_to_account_cv.ship_to_customer_num} = 623580,464452  ${ship_to_account_cv.ship_to_customer_num} = 24 and
   join: time_detail_cv {
     view_label: "Time Detail"
     type: left_outer

@@ -159,6 +159,7 @@ dimension: is_last_12_months {
     label: "SOURCE Purchases"
     type: sum
     sql: ${ext_sell_dlr} ;;
+    value_format: "$#,##0.00;($#,##0.00)"
     filters: [
       cardinal_account_group_cv.source_contract: "Y",
       product_cv.item_type_cde: "1,9,30"
@@ -171,6 +172,7 @@ dimension: is_last_12_months {
     label: "Rebate Inelig SOURCE Purchases"
     type: sum
     sql: ${ext_sell_dlr} ;;
+   value_format: "$#,##0.00;($#,##0.00)"
     filters: [
       cardinal_account_group_cv.source_contract: "Y",
       override_type_cv.ovrd_type_id: "I"
@@ -188,6 +190,7 @@ dimension: is_last_12_months {
     label: "Rebate Ellig SOURCE Purchases"
     type: number
     sql: ${SOURCE_Purchases} - ${Rebate_Inelig_SOURCE_Purchases} ;;
+    value_format: "$#,##0.00;($#,##0.00)"
   }
 
   dimension: Flag {
@@ -200,12 +203,14 @@ dimension: is_last_12_months {
     label: "Total Sales"
     type: sum
     sql: ${ext_sell_dlr} ;;
+    value_format: "$#,##0.00;($#,##0.00)"
   }
 
   measure: Total_Rx_Purchases {
     label: "Total Rx"
     type: sum
     sql: ${ext_sell_dlr} ;;
+    value_format: "$#,##0.00;($#,##0.00)"
     filters: [
     product_cv.rx_indicator: "Rx"
     ]
@@ -225,6 +230,7 @@ dimension: is_last_12_months {
     label: "SPX Purchases"
     type: sum
     sql: ${ext_sell_dlr} ;;
+    value_format: "$#,##0.00;($#,##0.00)"
     filters: [
 
       is_SPX_Purchases: "No",
@@ -241,6 +247,7 @@ dimension: is_last_12_months {
     label: "SPD Purchases"
     type: sum
     sql: ${ext_sell_dlr} ;;
+    value_format: "$#,##0.00;($#,##0.00)"
     filters: [
       is_SPD_Purchases: "No",
       order_entry_method_cv.order_entry_mthd_id: "4,9,J",
@@ -252,6 +259,7 @@ dimension: is_last_12_months {
     label: "Dropship"
     type: sum
     sql: ${ext_sell_dlr} ;;
+   value_format: "$#,##0.00;($#,##0.00)"
     filters: [
      invoice_line_cv.trnsct_type_key_num: "3"
     ]
@@ -262,6 +270,7 @@ dimension: is_last_12_months {
     label: "Total Generic"
     type: sum
     sql: ${ext_sell_dlr} ;;
+    value_format: "$#,##0.00;($#,##0.00)"
     filters: [
       product_cv.card_gen_ind_desc: "GENERIC DRUG"
     ]
@@ -271,6 +280,7 @@ dimension: is_last_12_months {
     label: "Total Brand"
     type: sum
     sql: ${ext_sell_dlr} ;;
+    value_format: "$#,##0.00;($#,##0.00)"
     filters: [
       product_cv.card_gen_ind_desc: "BRANDED DRUG"
     ]
@@ -280,6 +290,7 @@ dimension: is_last_12_months {
     label: "Generic Rx"
     type: sum
     sql: ${ext_sell_dlr} ;;
+    value_format: "$#,##0.00;($#,##0.00)"
     filters: [
       product_cv.card_gen_ind_desc: "GENERIC DRUG",
       product_cv.rx_indicator: "Rx"
@@ -290,6 +301,7 @@ dimension: is_last_12_months {
     label: "Brand Rx"
     type: sum
     sql: ${ext_sell_dlr} ;;
+    value_format: "$#,##0.00;($#,##0.00)"
     filters: [
       product_cv.card_gen_ind_desc: "BRANDED DRUG",
       product_cv.rx_indicator: "Rx"
@@ -300,6 +312,7 @@ dimension: is_last_12_months {
     label: "Specialty Rx"
     type: sum
     sql: ${ext_sell_dlr} ;;
+    value_format: "$#,##0.00;($#,##0.00)"
     filters: [
       order_entry_method_cv.order_entry_mthd_desc: "ORDERING - SPD , SPDPASSTHRU",
       product_cv.rx_indicator: "Rx"

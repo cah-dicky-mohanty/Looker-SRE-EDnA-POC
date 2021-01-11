@@ -8,6 +8,11 @@ view: ship_to_account_cv {
     sql: ${curr_ship_to_location_num}||'-'||${curr_ship_to_customer_num}||' '||${acct_nam} ;;
   }
 
+  dimension: account_selector {
+    type: number
+    sql: ${curr_ship_to_location_num}||'-'||${curr_ship_to_customer_num} ;;
+  }
+
   dimension: acct2_nam {
     type: string
     sql: ${TABLE}.ACCT2_NAM ;;
