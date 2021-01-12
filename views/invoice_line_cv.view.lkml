@@ -198,13 +198,30 @@ dimension: is_last_12_months {
     sql: 'Yes' ;;
   }
 
+measure: Total_Purchases_Hidden {
+  label: "Total Sales Hidden"
+  type: sum
+  hidden: yes
+  value_format: "$#,##0;($#,##0)"
+  sql: ${ext_sell_dlr} ;;
+  }
 
   measure: Total_Purchases {
     label: "Total Sales"
     type: sum
     sql: ${ext_sell_dlr} ;;
-    value_format: "$#,##0.00;($#,##0.00)"
+    html:
+       <b>{{ Total_Purchases_Hidden._rendered_value }} </b> <br>  <b> {{ Total_Purchases_Percent._rendered_value }}  </b> </div>
+      ;;
   }
+
+#   html: {{value}} <br>  {{ Total_Purchases_Percent._rendered_value }}   ;;
+  measure: Total_Purchases_Percent {
+    label: "Total Sales Percent"
+    type: percent_of_total
+    sql: ${Total_Purchases} ;;
+  }
+# "$#,##0.00;($#,##0.00)"
 
   measure: Total_Rx_Purchases {
     label: "Total Rx"

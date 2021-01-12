@@ -22,11 +22,13 @@ view: product_cv {
           WHEN TRIM(${cardinal_account_group_cv.source_contract}) = 'Y' OR
           ${product_cv.item_type_cde} in (1,9,30) THEN 'Total SOURCE'
           ELSE 'Others'
-          END
-          ;;
-  }
-# ${cardinal_account_group_cv.source_contract} = 'Y' and
+          END;;
+    html:<b> {{value}} </b> <br>  <b> {{ invoice_line_cv.Total_Purchases_Percent._rendered_value }} </b>  ;;
 
+  }
+
+#  html: {{ value }} || {{ invoice_line_cv.Total_Purchases_Percent._rendered_value }} of total>> ;;  ## here we use || to concatenate the values
+# html: {{value}} <br> <b> {{ user_count._rendered_value }} </b>
 
   dimension: accunet_qty {
     type: number
