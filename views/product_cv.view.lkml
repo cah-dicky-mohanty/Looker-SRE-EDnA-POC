@@ -27,8 +27,46 @@ view: product_cv {
 
   }
 
-#  html: {{ value }} || {{ invoice_line_cv.Total_Purchases_Percent._rendered_value }} of total>> ;;  ## here we use || to concatenate the values
-# html: {{value}} <br> <b> {{ user_count._rendered_value }} </b>
+  dimension: drill_dimension_dollars{
+    label: "Drill Dimension $"
+    type: string
+    sql:  CASE
+          WHEN TRIM(${product_cv.card_gen_ind_desc}) = 'GENERIC DRUG' and
+          ${product_cv.rx_indicator} = 'Rx' THEN 'Generic Rx'
+          WHEN TRIM(${product_cv.card_gen_ind_desc}) = 'BRANDED DRUG' and
+          ${product_cv.rx_indicator} = 'Rx' THEN 'Brand Rx'
+          WHEN TRIM(${order_entry_method_cv.order_entry_mthd_desc}) in ('ORDERING - SPD' , 'SPDPASSTHRU') OR
+          ${product_cv.rx_indicator} = 'Rx' THEN 'Specialty Rx'
+          WHEN TRIM(${cardinal_account_group_cv.source_contract}) = 'Y' OR
+          ${product_cv.item_type_cde} in (1,9,30) THEN 'Total SOURCE'
+          ELSE 'Others'
+          END;;
+   link: {
+    label: "Show in Percentage (%)"
+    url: "https://ldec5009arplk01:9999/looks/41?& | url_encode }}"
+  }
+  }
+
+  dimension: drill_dimension_percent {
+    label: "Drill Dimension %"
+    type: string
+    sql:  CASE
+          WHEN TRIM(${product_cv.card_gen_ind_desc}) = 'GENERIC DRUG' and
+          ${product_cv.rx_indicator} = 'Rx' THEN 'Generic Rx'
+          WHEN TRIM(${product_cv.card_gen_ind_desc}) = 'BRANDED DRUG' and
+          ${product_cv.rx_indicator} = 'Rx' THEN 'Brand Rx'
+          WHEN TRIM(${order_entry_method_cv.order_entry_mthd_desc}) in ('ORDERING - SPD' , 'SPDPASSTHRU') OR
+          ${product_cv.rx_indicator} = 'Rx' THEN 'Specialty Rx'
+          WHEN TRIM(${cardinal_account_group_cv.source_contract}) = 'Y' OR
+          ${product_cv.item_type_cde} in (1,9,30) THEN 'Total SOURCE'
+          ELSE 'Others'
+          END;;
+    link: {
+      label: "Show in Dollars ($)"
+      url: "https://ldec5009arplk01:9999/looks/40?& | url_encode }}"
+    }
+  }
+#   f[users.state]={{ _filters['users.state']
 
   dimension: accunet_qty {
     type: number

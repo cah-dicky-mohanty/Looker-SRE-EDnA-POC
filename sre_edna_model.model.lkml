@@ -32,26 +32,22 @@ explore: SRE_Explore{
   view_name: invoice_line_cv {
   view_label: "Invoice Line"
   sql_always_where: ${is_last_12_months} and
-  ${ship_to_account_cv.ship_to_customer_num} = 464452
-
+  ${ship_to_account_cv.account_selector} in ('24-464452','6-10382','6-642246', '11-488036',
+'6-2803', '6-633177','95-170019', '6-639929', '6-643741', '6-643758', '6-643757', '6-634473', '6-635467')
+  and ${ship_to_account_cv.curr_vrsn_flg} = 'Y'
+  and ${invoice_line_cv.corp_acct_key_num} = 1
   ;;
 }
-#  ${invoice_line_cv.dte_key_num} >= ${invoice_line_cv.last_12_month_dte_key_num}
-#   always_filter: {
-#   filters: [invoice_line_cv.dte_key_num: "": "2020-06-01"]
-#   sql_always_where: ${invoice_line_cv.dte_key_num} > ${invoice_line_cv.last_12_month_dte_key_num} ;;
+# and ${pricing_segment_cv.price_sgmnt_cde} in (120,121,122,123,124)
 
   join:  ship_to_account_cv{
     view_label: "Ship To Account"
     type: left_outer
     sql_on: ${invoice_line_cv.acct_key_num} = ${ship_to_account_cv.acct_key_num} ;;
     relationship: many_to_one
-    fields: [ship_to_customer_num, ship_to_location_num, acct_key_num,account_selector, account_name_selector]
-    sql_where: ${invoice_line_cv.corp_acct_key_num} = 1  and
-      ${ship_to_account_cv.curr_vrsn_flg} = 'Y'
-      ;;
+    fields: [ship_to_customer_num, ship_to_location_num, acct_key_num,account_selector, account_name_selector,curr_vrsn_flg]
   }
-# , 24-464452'  ${ship_to_account_cv.ship_to_customer_num} = 623580,464452  ${ship_to_account_cv.ship_to_customer_num} = 24 and
+
   join: time_detail_cv {
     view_label: "Time Detail"
     type: left_outer
@@ -87,7 +83,7 @@ explore: SRE_Explore{
     view_label: "Pricing Segment"
     type: left_outer
     sql_on: ${invoice_line_cv.price_sgmnt_key_num} = ${pricing_segment_cv.price_sgmnt_key_num}  ;;
-    sql_where: ${pricing_segment_cv.price_sgmnt_cde} = 120,121,122,123,124 and ${ship_to_account_cv.curr_vrsn_flg} = 'Y';;
+
     fields: [price_sgmnt_key_num, price_sgmnt_cde, price_sgmnt_desc]
     relationship: many_to_one
   }
@@ -104,7 +100,7 @@ explore: SRE_Explore{
     view_label: "Product"
     type: left_outer
     sql_on: ${invoice_line_cv.prod_key_num} = ${product_cv.prod_key_num};;
-    fields: [volume_breakdown_kpis, prod_key_num, corp_item_num, ndc_cde,gen_nam,trade_nam, supplier_nam, prod_nam,item_type_cde,rx_indicator,card_gen_ind_cde,card_gen_ind_desc,fdb_ahfs_id,size_txt, pack_size_qty, pack_qty,strgth_txt,total_qty]
+    fields: [drill_dimension_dollars ,drill_dimension_percent, volume_breakdown_kpis, prod_key_num, corp_item_num, ndc_cde,gen_nam,trade_nam, supplier_nam, prod_nam,item_type_cde,rx_indicator,card_gen_ind_cde,card_gen_ind_desc,fdb_ahfs_id,size_txt, pack_size_qty, pack_qty,strgth_txt,total_qty]
     relationship: many_to_one
   }
 
@@ -132,13 +128,13 @@ explore: SRE_Explore{
     relationship: many_to_one
   }
 
-# always_join: [aap_rebate_table]
+
 join: aap_rebate_table {
   type: left_outer
   relationship: many_to_one
   sql_on: 1=1;;
 }
-# ${invoice_line_cv.SOURCE_Purchases} BETWEEN ${aap_rebate_table.aap_rebate_spend_low_bound} AND ${aap_rebate_table.aap_rebate_spend_high_bound}
+
 
   access_filter: {
      field: time_detail_cv.rfrnc_dte_date

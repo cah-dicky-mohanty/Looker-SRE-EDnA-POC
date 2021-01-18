@@ -4,6 +4,8 @@ sql_table_name: `VI0_PHM_SDW_NP.INVOICE_LINE_CV`;;
 
 #  sql_table_name: `datamarket-np-cah.PSDW.ARCH_PSDW_VIEWS_INVOICE_LINE` ;;
 
+
+
   dimension: last_12_month_date {
     type: date
     sql: DATE_SUB((CURRENT_DATE) , INTERVAL 12 MONTH);;
@@ -210,8 +212,9 @@ measure: Total_Purchases_Hidden {
     label: "Total Sales"
     type: sum
     sql: ${ext_sell_dlr} ;;
+    value_format: "$#,##0;($#,##0)"
     html:
-       <b>{{ Total_Purchases_Hidden._rendered_value }} </b> <br>  <b> {{ Total_Purchases_Percent._rendered_value }}  </b> </div>
+       <b>{{ rendered_value }} </b> <br>  <b> {{ Total_Purchases_Percent._rendered_value }}  </b> </div>
       ;;
   }
 
@@ -222,6 +225,15 @@ measure: Total_Purchases_Hidden {
     sql: ${Total_Purchases} ;;
   }
 # "$#,##0.00;($#,##0.00)"
+
+
+  measure: purchases_dollars_percent{
+    label: "Purchase Dollars & Percent"
+    type: sum
+    sql: ${ext_sell_dlr} ;;
+    value_format: "$#,##0;($#,##0)"
+  }
+
 
   measure: Total_Rx_Purchases {
     label: "Total Rx"
