@@ -9,7 +9,7 @@ view: ship_to_account_cv {
   }
 
   dimension: account_selector {
-    type: number
+    type: string
     sql: ${curr_ship_to_location_num}||'-'||${curr_ship_to_customer_num} ;;
   }
 
