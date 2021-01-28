@@ -173,3 +173,22 @@ explore: SRE_Explore_2 {
   }
 
 }
+
+explore: SRE_Explore_3 {
+  view_name: ship_to_account_cv
+  view_label: "Ship To Account"
+
+  join: account_user_rlt_cv {
+    view_label: "Account User RLT"
+    type: left_outer
+    sql_on: ${account_user_rlt_cv.acct_key_num} = ${ship_to_account_cv.acct_key_num} ;;
+    relationship: many_to_many
+  }
+
+  join: mercury_user_cv {
+    view_label: "Mercury User"
+    type: left_outer
+    sql_on: ${account_user_rlt_cv.mrcry_user_id} = ${mercury_user_cv.mrcry_user_id} ;;
+    relationship: many_to_many
+  }
+}

@@ -41,10 +41,6 @@ view: product_cv {
           ${product_cv.item_type_cde} in (1,9,30) THEN 'Total SOURCE'
           ELSE 'Others'
           END;;
-   link: {
-    label: "Show in Percentage (%)"
-    url: "https://ldec5009arplk01:9999/looks/41?& | url_encode }}"
-  }
   }
 
   dimension: drill_dimension_percent {
@@ -61,10 +57,6 @@ view: product_cv {
           ${product_cv.item_type_cde} in (1,9,30) THEN 'Total SOURCE'
           ELSE 'Others'
           END;;
-    link: {
-      label: "Show in Dollars ($)"
-      url: "https://ldec5009arplk01:9999/looks/40?& | url_encode }}"
-    }
   }
 #   f[users.state]={{ _filters['users.state']
 
