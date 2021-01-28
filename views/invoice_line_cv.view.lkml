@@ -37,6 +37,119 @@ dimension: is_last_12_months {
       ;;
   }
 
+  parameter: Additional_Source_Purchases {
+    label: "Additional Source Purchases"
+    type: number
+
+  }
+
+    measure: SOURCE_Total_Rx {
+    label: "SOURCE/Total Rx"
+    type: number
+    sql: ${SOURCE_Purchases} / ${Total_Rx_Purchases} ;;
+  }
+
+  dimension: ASP {
+    type: number
+    sql:  {% parameter Additional_Source_Purchases %} ;;
+
+  }
+
+  measure: latest_rebate_status_KPI {
+    label: "Latest Rebate Status KPI"
+    type: number
+    sql: ${latest_rebate_status_KPI_ASP} + ${ASP};;
+    html:
+    <div style="border-radius: 10px; background-color: #d3363d; color: #fff;">
+    <div style="font-size: 4rem; display: inline-block;">{{ value }} (20%)</div>
+    <div style="display: inline-block;">
+    <p style="font-size: 1.5rem;"><strong>Your latest rebate status</strong></p>
+    <p style="font-size: 1.5rem;">(Next tier increases to 22%)</p>
+    </div>
+    </div> ;;
+    }
+
+  measure: Total_Purchases_ASP {
+    #label: "Total Sales ASP"
+    type: sum
+    sql: ${ext_sell_dlr};;
+    value_format: "$#,##0;($#,##0)"
+    html:
+       <b>{{ rendered_value }} </b> <br>  <b> {{ Total_Purchases_Percent._rendered_value }}  </b> </div>
+      ;;
+  }
+
+  measure: Total_Purchases {
+    label: "Total Sales"
+    type: number
+    sql: ${Total_Purchases_ASP} + ${ASP};;
+    value_format: "$#,##0;($#,##0)"
+    html:
+       <b>{{ rendered_value }} </b> <br>  <b> {{ Total_Purchases_Percent._rendered_value }}  </b> </div>
+      ;;
+
+  }
+
+  measure: latest_rebate_status_KPI_ASP {
+    #   label: "Latest Rebate Status KPI"
+    type: count
+    html:
+    <div style="border-radius: 10px; background-color: #d3363d; color: #fff;">
+        <div style="font-size: 4rem; display: inline-block;">{{ value }} (20%)</div>
+        <div style="display: inline-block;">
+        <p style="font-size: 1.5rem;"><strong>Your latest rebate status</strong></p>
+        <p style="font-size: 1.5rem;">(Next tier increases to 22%)</p>
+        </div>
+    </div> ;;
+  }
+
+  measure: SOURCE_to_Rx_Percent{
+    label: "SOURCE to Rx %"
+    type: number
+    sql: ${SOURCE_to_Rx_Percent_ASP} + ${ASP}   ;;
+    value_format: "0.00\%"
+  }
+
+
+  measure: SOURCE_to_Rx_Percent_Less_SPX_SPD{
+    label: "SOURCE to Rx Less SPX/SPD %"
+    type: number
+    sql: ${SOURCE_to_Rx_Percent_Less_SPX_SPD_ASP} + ${ASP} ;;
+    value_format: "0.00\%"
+  }
+
+  measure: SOURCE_to_Rx_Percent_ASP{
+ #   label: "SOURCE to Rx %"
+    type: number
+    sql: ROUND((${Total_Rx_Purchases}/${Total_Purchases})*100, 2)   ;;
+    value_format: "0.00\%"
+  }
+
+
+  measure: SOURCE_to_Rx_Percent_Less_SPX_SPD_ASP{
+ #  label: "SOURCE to Rx Less SPX/SPD %"
+    type: number
+    sql: ROUND(((${Total_Rx_Purchases})/(${Total_Purchases} - ${SPD_Purchases})) * 100, 2)   ;;
+    value_format: "0.00\%"
+  }
+
+  #measure: SOURCE_Purchases_New {
+  #  label: "SOURCE Purchases New"
+  #  type: number
+  #  sql: ${SOURCE_Purchases} + ${ASP} ;;
+  #  value_format: "$#,##0.00;($#,##0.00)"
+
+  #  }
+
+  #measure: Total_Purchases {
+  #  label: "Total Sales"
+  #  type: sum
+  #  sql: ${ext_sell_dlr} ;;
+  #  value_format: "$#,##0;($#,##0)"
+  #  html:
+  #     <b>{{ rendered_value }} </b> <br>  <b> {{ Total_Purchases_Percent._rendered_value }}  </b> </div>
+  #    ;;
+  #}
 
 # ${aap_rebate_table.spend_low_bound}
   parameter: KPI_selector {
@@ -73,21 +186,6 @@ dimension: is_last_12_months {
            NULL
         {% endif %} ;;
     }
-
-
-  measure: latest_rebate_status_KPI {
-    label: "Latest Rebate Status KPI"
-    type: count
-    html:
-    <div style="border-radius: 10px; background-color: #d3363d; color: #fff;">
-        <div style="font-size: 4rem; display: inline-block;">{{ value }} (20%)</div>
-        <div style="display: inline-block;">
-        <p style="font-size: 1.5rem;"><strong>Your latest rebate status</strong></p>
-        <p style="font-size: 1.5rem;">(Next tier increases to 22%)</p>
-        </div>
-    </div> ;;
-  }
-
 
   measure: volume_breakdown_visualization_arb883 {
     label: "Volume Breakdown Visualization"
@@ -170,7 +268,7 @@ dimension: is_last_12_months {
     #       product_cv.item_type_cde: "-24"
   }
 
-  measure: Rebate_Inelig_SOURCE_Purchases {
+ measure: Rebate_Inelig_SOURCE_Purchases {
     label: "Rebate Inelig SOURCE Purchases"
     type: sum
     sql: ${ext_sell_dlr} ;;
@@ -208,17 +306,7 @@ measure: Total_Purchases_Hidden {
   sql: ${ext_sell_dlr} ;;
   }
 
-  measure: Total_Purchases {
-    label: "Total Sales"
-    type: sum
-    sql: ${ext_sell_dlr} ;;
-    value_format: "$#,##0;($#,##0)"
-    html:
-       <b>{{ rendered_value }} </b> <br>  <b> {{ Total_Purchases_Percent._rendered_value }}  </b> </div>
-      ;;
-  }
-
-#   html: {{value}} <br>  {{ Total_Purchases_Percent._rendered_value }}   ;;
+  #   html: {{value}} <br>  {{ Total_Purchases_Percent._rendered_value }}   ;;
   measure: Total_Purchases_Percent {
     label: "Total Sales Percent"
     type: percent_of_total
@@ -355,28 +443,6 @@ measure: Total_Purchases_Hidden {
     type: number
     sql: ${SOURCE_Purchases} / ${Total_Purchases} ;;
   }
-
-  measure: SOURCE_Total_Rx {
-    label: "SOURCE/Total Rx"
-    type: number
-    sql: ${SOURCE_Purchases} / ${Total_Rx_Purchases} ;;
-  }
-
-  measure: SOURCE_to_Rx_Percent{
-    label: "SOURCE to Rx %"
-    type: number
-    sql: ROUND((${Total_Rx_Purchases}/${Total_Purchases})*100, 2)   ;;
-    value_format: "0.00\%"
-  }
-
-
-  measure: SOURCE_to_Rx_Percent_Less_SPX_SPD{
-    label: "SOURCE to Rx Less SPX/SPD %"
-    type: number
-    sql: ROUND(((${Total_Rx_Purchases})/(${Total_Purchases} - ${SPD_Purchases})) * 100, 2)   ;;
-    value_format: "0.00\%"
-  }
-
 
 
   dimension: acct_key_num {
