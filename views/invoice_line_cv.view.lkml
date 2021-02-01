@@ -40,6 +40,7 @@ dimension: is_last_12_months {
   parameter: Additional_Source_Purchases {
     label: "Additional Source Purchases"
     type: number
+    default_value: "0"
 
   }
 
@@ -268,6 +269,12 @@ dimension: is_last_12_months {
     #       product_cv.item_type_cde: "-24"
   }
 
+  measure: Source_Purchases_with_Additional {
+    label: "Source Puchases with Additional Source Purchases"
+    type: number
+    sql:  ${SOURCE_Purchases} + {% parameter Additional_Source_Purchases %} ;;
+  }
+
  measure: Rebate_Inelig_SOURCE_Purchases {
     label: "Rebate Inelig SOURCE Purchases"
     type: sum
@@ -313,7 +320,6 @@ measure: Total_Purchases_Hidden {
     sql: ${Total_Purchases} ;;
   }
 # "$#,##0.00;($#,##0.00)"
-
 
   measure: purchases_dollars_percent{
     label: "Purchase Dollars & Percent"
