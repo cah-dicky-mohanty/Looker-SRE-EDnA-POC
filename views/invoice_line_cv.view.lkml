@@ -103,33 +103,34 @@ dimension: is_last_12_months {
     </div> ;;
   }
 
+#   measure: SOURCE_to_Rx_Percent{
+#     label: "SOURCE to Rx %"
+#     type: number
+#     sql: ${SOURCE_to_Rx_Percent_ASP}  ;;
+#     value_format: "0.00\%"
+#   }
+
+
+#   measure: SOURCE_to_Rx_Percent_Less_SPX_SPD{
+#     label: "SOURCE to Rx Less SPX/SPD %"
+#     type: number
+#     sql: ${SOURCE_to_Rx_Percent_Less_SPX_SPD_ASP}  ;;
+#     value_format: "0.00\%"
+#   }
+
   measure: SOURCE_to_Rx_Percent{
     label: "SOURCE to Rx %"
     type: number
-    sql: ${SOURCE_to_Rx_Percent_ASP} + ${ASP}   ;;
+    sql: ROUND((${Total_Rx_Purchases}+${ASP})/(${Total_Purchases}+${ASP})*100, 2)   ;;
     value_format: "0.00\%"
   }
 
 
-  measure: SOURCE_to_Rx_Percent_Less_SPX_SPD{
-    label: "SOURCE to Rx Less SPX/SPD %"
+  measure: SOURCE_to_Rx_Percent_Less_SPX_SPDP{
+   label: "SOURCE to Rx Less SPX/SPD %"
     type: number
-    sql: ${SOURCE_to_Rx_Percent_Less_SPX_SPD_ASP} + ${ASP} ;;
-    value_format: "0.00\%"
-  }
-
-  measure: SOURCE_to_Rx_Percent_ASP{
- #   label: "SOURCE to Rx %"
-    type: number
-    sql: ROUND((${Total_Rx_Purchases}/${Total_Purchases})*100, 2)   ;;
-    value_format: "0.00\%"
-  }
-
-
-  measure: SOURCE_to_Rx_Percent_Less_SPX_SPD_ASP{
- #  label: "SOURCE to Rx Less SPX/SPD %"
-    type: number
-    sql: ROUND(((${Total_Rx_Purchases})/(${Total_Purchases} - ${SPD_Purchases})) * 100, 2)   ;;
+    sql: ROUND((((${Total_Rx_Purchases})+${ASP})/((${Total_Purchases})+${ASP}
+    - (${SPD_Purchases})+${ASP})) * 100, 2)   ;;
     value_format: "0.00\%"
   }
 
