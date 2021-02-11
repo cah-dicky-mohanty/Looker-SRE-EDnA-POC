@@ -2,6 +2,7 @@ connection: "edna_non-prod"
 
 # include all the views
 include: "/views/**/*.view"
+include: "/tests_invoice_line_cv.lkml"
 
 # include: "/common_views/**/rebate_table.view.lkml"
 
