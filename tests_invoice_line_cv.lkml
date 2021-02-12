@@ -101,17 +101,17 @@ test: test_invoices_anomaly {
   }
 }
 
-test: test_total_purchases_for_particular_account {
-  explore_source: SRE_Explore {
-    column: external_sell_dlr {
-      field: invoice_line_cv.Total_Purchases_ASP
-    }
-    filters: [invoice_line_cv.acct_key_num: "13436251"]
-  }
-  assert: invoices_total_check_for_particular_account {
-    expression: round(${invoice_line_cv.Total_Purchases_ASP}, 0) = 2491925 ;;
-  }
-}
+# test: test_total_purchases_for_particular_account {
+#   explore_source: SRE_Explore {
+#     column: external_sell_dlr {
+#       field: invoice_line_cv.Total_Purchases_ASP
+#     }
+#     filters: [invoice_line_cv.acct_key_num: "13436251"]
+#   }
+#   assert: invoices_total_check_for_particular_account {
+#     expression: round(${invoice_line_cv.Total_Purchases_ASP}, 0) = 2491925 ;;
+#   }
+# }
 
 # test: invoices_total_check_for_a_particular_account_and_date {
 #   explore_source: SRE_Explore {
