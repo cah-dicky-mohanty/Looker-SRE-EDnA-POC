@@ -325,14 +325,9 @@ measure: Total_Purchases_Hidden {
   measure: purchases_dollars_percent{
     label: "Purchase Dollars & Percent"
     type: sum
-<<<<<<< HEAD
-    sql:${ext_sell_dlr} ;;
-    }
-=======
     sql: ${ext_sell_dlr} ;;
     value_format: "$#,##0;($#,##0)"
   }
->>>>>>> branch 'master' of https://github.com/cah-dicky-mohanty/Looker-SRE-EDnA-POC.git
 
 
   measure: Total_Rx_Purchases {
@@ -399,12 +394,8 @@ measure: Total_Purchases_Hidden {
     label: "Total Generic"
     type: sum
     sql: ${ext_sell_dlr} ;;
-<<<<<<< HEAD
-     filters: [
-=======
     value_format: "$#,##0.00;($#,##0.00)"
     filters: [
->>>>>>> branch 'master' of https://github.com/cah-dicky-mohanty/Looker-SRE-EDnA-POC.git
       product_cv.card_gen_ind_desc: "GENERIC DRUG"
     ]
   }
