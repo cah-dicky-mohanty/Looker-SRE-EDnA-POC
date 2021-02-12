@@ -26,6 +26,10 @@ view: time_detail_cv {
     type: date
     sql: CURRENT_DATE ;;
   }
+  dimension: previous_month  {
+    type: date
+    sql: DATE_SUB((CURRENT_DATE) , INTERVAL 1 MONTH);;
+  }
 
   dimension: business_days  {
     type: number
@@ -98,17 +102,33 @@ view: time_detail_cv {
     html:
     <div style=" border-radius: 5px;width:600px;padding-left: 5px;background-color: #FFFFFF;">
     <div style="color:#000;style= display:inline-block; font-size:20px; font-weight:bold; text-align: left;">Compliance<div style="text-align: right;">&#xFE19;</div>
-        <div style=" display:inline-block; font-size:15px;text-align: left;">Source divided by total RX minus specialty and dropship.<p style="font-size: 1rem;"></p>
-        <hr style="height:30px; width:450px;"></hr>
-        <p style="font-size: 1rem;">Current Month<br/>(out of {{ business_days._value }} purchasing days)</p><br/><br/><br/><br/>
-        <p style="font-size: 1rem;">Last Month<br/>(out of {{ business_days._value }} purchasing days)</p>
+        <div style=" display:inline-block; font-size:15px;text-align: left;">SOURCE divided by total Rx minus specialty and dropship.
         <hr style="height:10px; width:600px;"></hr>
-        <font color="green;"></font>
+        <p style="font-size: 1rem;">Current Month as of <br/> {{current_date._value}} (out of {{ business_days_remaining._value }} purchasing days) </p></br></br>{{invoice_line_cv.SOURCE_to_Rx_Percent}} % SOURCE to Rx
+
+        <br/><br/>{{invoice_line_cv.SOURCE_to_Rx_Percent_Less_SPX_SPD}} % Less SPX/SPD<br/><br/>
+        <p style="font-size: 1rem;">Last Month as of <br/> {{previous_month}} (out of {{ business_days_remaining._value }} purchasing days)</p> </br> {{invoice_line_cv.Total_Purchases}} SOURCE to Rx</p><br/><br/>{{invoice_line_cv.Total_Rx_Purchases}} Less SPX/SPD<br/><br/>
+        <hr style="height:10px; width:600px;"></hr>
         <p style="color: #D11818;font-size: 1rem;"><a href="url">View More Details</p></a>
         </div>
     </div> ;;
   }
 
+
+  measure: Off_Contract {
+    label: "Off Contract Purchases List"
+    type: count
+    html:
+    <div style=" border-radius: 5px;width:600px;padding-left: 5px;background-color: #FFFFFF;">
+    <div style="color:#000;style= display:inline-block; font-size:20px; font-weight:bold; text-align: left;">Off Contract Purchases<div style="text-align: right;">&#xFE19;</div>
+        <div style=" display:inline-block; font-size:15px;text-align: left;">Purchases made when a SOURCE product was available.
+        <hr style="height:1px; width:600px;"></hr>
+        <br/>Mfg: {{product_cv.supplier_nam}}<br/>NDC: {{product_cv.ndc_cde}} <br/> Product: {{product_cv.prod_nam}}</br> Qty: {{product_cv.pack_size_qty}}</br> net cost: {{invoice_line_cv.ext_sell_dlr}}</br>
+        Ordered date: {{order_date.order_dte}}</br>  Frequency: </br></br>  missed savings: </br>
+        <p style="color: #D11818;font-size: 1rem;"><a href="url">View More Details</p></a>
+        </div>
+    </div> ;;
+  }
 
   parameter: select_timeframe  {
     type: unquoted
@@ -184,8 +204,6 @@ view: time_detail_cv {
     sql: CASE WHEN {% date_start date_filter %} IS NULL THEN '2015-01-01' ELSE CAST({% date_start date_filter %} AS DATE) END;;
   }
 
-
-
   dimension_group: filter_end_date {
     type: time
     timeframes: [raw,date]
@@ -193,8 +211,7 @@ view: time_detail_cv {
   }
 
 
-
-  dimension: interval {
+    dimension: interval {
     type: number
     sql: DATE_DIFF(${filter_start_date_raw}, ${filter_end_date_raw}, DAY);;
   }
