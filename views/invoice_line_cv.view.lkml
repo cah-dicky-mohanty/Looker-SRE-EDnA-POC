@@ -200,7 +200,7 @@ dimension: is_last_12_months {
     label: "Total Sales"
     type: sum
     sql:${ext_sell_dlr} ;;
-  }
+    }
 
   measure: Total_Rx_Purchases {
     label: "Total Rx"
@@ -262,7 +262,7 @@ dimension: is_last_12_months {
     label: "Total Generic"
     type: sum
     sql: ${ext_sell_dlr} ;;
-    filters: [
+     filters: [
       product_cv.card_gen_ind_desc: "GENERIC DRUG"
     ]
   }
