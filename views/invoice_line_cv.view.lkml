@@ -1,41 +1,4 @@
-test: test_number_of_transactions_for_account {
-  explore_source: SRE_Explore {
-    column: num_invoices {
-      field: invoice_line_cv.num_invoices
-    }
-    filters: [invoice_line_cv.acct_key_num: "13436251"]
-  }
-  assert: number_of_transactions_for_account {
-    expression: ${invoice_line_cv.num_invoices} = 1009 ;;
-  }
-}
 
-test: test_number_of_transactions_on_a_single_day {
-  explore_source: SRE_Explore {
-    column: num_invoices {
-      field: invoice_line_cv.num_invoices
-    }
-    filters: [time_detail_cv.rfrnc_dte_date: "2020-03-17"]
-  }
-  assert: number_of_transactions_on_a_single_day {
-    expression: ${invoice_line_cv.num_invoices} = 48 ;;
-  }
-}
-
-test: test_number_of_line_items_for_single_order {
-  explore_source: SRE_Explore {
-  #     column: order_line_num {
-  #       field: invoice_line_cv.order_line_num
-  #     }
-  column: count {
-    field: invoice_line_cv.count
-  }
-  filters: [invoice_line_cv.invoice_num: "9995338"]
-  }
-  assert: number_of_line_items_for_single_order {
-  expression: ${invoice_line_cv.count} = 6;;
-  }
-}
 view: invoice_line_cv {
 sql_table_name: `VI0_PHM_SDW_NP.INVOICE_LINE_CV`;;
 
