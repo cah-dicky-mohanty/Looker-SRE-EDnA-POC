@@ -17,16 +17,48 @@ view: product_cv {
           ${product_cv.rx_indicator} = 'Rx' THEN 'Generic Rx'
           WHEN TRIM(${product_cv.card_gen_ind_desc}) = 'BRANDED DRUG' and
           ${product_cv.rx_indicator} = 'Rx' THEN 'Brand Rx'
-          WHEN TRIM(${order_entry_method_cv.order_entry_mthd_desc}) in ('ORDERING - SPD' , 'SPDPASSTHRU') and
+          WHEN TRIM(${order_entry_method_cv.order_entry_mthd_desc}) in ('ORDERING - SPD' , 'SPDPASSTHRU') OR
           ${product_cv.rx_indicator} = 'Rx' THEN 'Specialty Rx'
-          WHEN TRIM(${cardinal_account_group_cv.source_contract}) = 'Y' and
+          WHEN TRIM(${cardinal_account_group_cv.source_contract}) = 'Y' OR
           ${product_cv.item_type_cde} in (1,9,30) THEN 'Total SOURCE'
           ELSE 'Others'
-          END
-          ;;
-  }
-# ${cardinal_account_group_cv.source_contract} = 'Y' and
+          END;;
+    html:<b> {{value}} </b> <br>  <b> {{ invoice_line_cv.Total_Purchases_Percent._rendered_value }} </b>  ;;
 
+  }
+
+  dimension: drill_dimension_dollars{
+    label: "Drill Dimension $"
+    type: string
+    sql:  CASE
+          WHEN TRIM(${product_cv.card_gen_ind_desc}) = 'GENERIC DRUG' and
+          ${product_cv.rx_indicator} = 'Rx' THEN 'Generic Rx'
+          WHEN TRIM(${product_cv.card_gen_ind_desc}) = 'BRANDED DRUG' and
+          ${product_cv.rx_indicator} = 'Rx' THEN 'Brand Rx'
+          WHEN TRIM(${order_entry_method_cv.order_entry_mthd_desc}) in ('ORDERING - SPD' , 'SPDPASSTHRU') OR
+          ${product_cv.rx_indicator} = 'Rx' THEN 'Specialty Rx'
+          WHEN TRIM(${cardinal_account_group_cv.source_contract}) = 'Y' OR
+          ${product_cv.item_type_cde} in (1,9,30) THEN 'Total SOURCE'
+          ELSE 'Others'
+          END;;
+  }
+
+  dimension: drill_dimension_percent {
+    label: "Drill Dimension %"
+    type: string
+    sql:  CASE
+          WHEN TRIM(${product_cv.card_gen_ind_desc}) = 'GENERIC DRUG' and
+          ${product_cv.rx_indicator} = 'Rx' THEN 'Generic Rx'
+          WHEN TRIM(${product_cv.card_gen_ind_desc}) = 'BRANDED DRUG' and
+          ${product_cv.rx_indicator} = 'Rx' THEN 'Brand Rx'
+          WHEN TRIM(${order_entry_method_cv.order_entry_mthd_desc}) in ('ORDERING - SPD' , 'SPDPASSTHRU') OR
+          ${product_cv.rx_indicator} = 'Rx' THEN 'Specialty Rx'
+          WHEN TRIM(${cardinal_account_group_cv.source_contract}) = 'Y' OR
+          ${product_cv.item_type_cde} in (1,9,30) THEN 'Total SOURCE'
+          ELSE 'Others'
+          END;;
+  }
+#   f[users.state]={{ _filters['users.state']
 
   dimension: accunet_qty {
     type: number

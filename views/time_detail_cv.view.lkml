@@ -140,7 +140,7 @@ view: time_detail_cv {
   }
 
   parameter: select_reference_date {
-    type: date_time
+    type: unquoted
 #     convert_tz: yes
   }
 
@@ -262,9 +262,11 @@ view: time_detail_cv {
   dimension: MTD {
     label: "MTD"
     type: yesno
-    sql: (EXTRACT(MONTH  FROM  ${rfrnc_dte_date}) = EXTRACT(MONTH FROM CURRENT_DATE())) ;;
+    sql: (EXTRACT(MONTH  FROM  ${rfrnc_dte_date}) = EXTRACT(MONTH FROM CURRENT_DATE()))
+    or (EXTRACT(YEAR  FROM  ${rfrnc_dte_date}) = EXTRACT(YEAR FROM CURRENT_DATE()))
+    ;;
     }
-#     < EXTRACT(DAY FROM CURRENT_TIME()));;
+#
 #                 OR
 #             (EXTRACT(DAY FROM ${rfrnc_dte_month}) = EXTRACT(DAY FROM CURRENT_TIMESTAMP()) AND
 #             EXTRACT(HOUR FROM ${rfrnc_dte_month}) < EXTRACT(HOUR FROM CURRENT_TIMESTAMP()))
