@@ -122,7 +122,7 @@ dimension: is_last_12_months {
   measure: SOURCE_to_Rx_Percent{
     label: "SOURCE to Rx %"
     type: number
-    sql: ROUND((${Total_Rx_Purchases}+${ASP})/(${Total_Purchases}+${ASP})*100, 2)   ;;
+    sql: ROUND((${Total_Rx_Purchases}+${ASP})/(${Total_Purchases}+${ASP})*100, 2) ;;
     value_format: "0.00\%"
   }
 
@@ -458,7 +458,13 @@ measure: Total_Purchases_Hidden {
   measure: SOURCE_Total {
     label: "SOURCE/Total"
     type: number
-    sql: ${SOURCE_Purchases} / ${Total_Purchases} ;;
+    sql: ${SOURCE_Purchases} / {Total_Purchases} ;;
+  }
+
+  measure: num_invoices {
+    label: "Number of Invoices"
+    type: count_distinct
+    sql: ${invoice_num} ;;
   }
 
 
