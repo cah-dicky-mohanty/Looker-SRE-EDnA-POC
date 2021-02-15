@@ -329,6 +329,16 @@ measure: Total_Purchases_Hidden {
     value_format: "$#,##0;($#,##0)"
   }
 
+  measure: Non_Compliant_Purchases{
+    label: "Non Compliant Purchases"
+    type: sum
+    sql: ${ext_sell_dlr} ;;
+    value_format: "$#,##0;($#,##0)"
+    filters: [
+      product_cv.item_type_cde: "1,9,30"
+    ]
+
+  }
 
   measure: Total_Rx_Purchases {
     label: "Total Rx"
