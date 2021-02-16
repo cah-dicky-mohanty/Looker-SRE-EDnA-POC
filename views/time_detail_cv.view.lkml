@@ -10,6 +10,11 @@ view: time_detail_cv {
     sql: ${TABLE}.RFRNC_DTE ;;
   }
 
+  dimension: current_month {
+    type: date_month
+    sql: ${TABLE}.RFRNC_DTE;;
+
+  }
 
   dimension: month_end {
     type: date
@@ -29,6 +34,11 @@ view: time_detail_cv {
   dimension: previous_month  {
     type: date
     sql: DATE_SUB((CURRENT_DATE) , INTERVAL 1 MONTH);;
+  }
+
+  dimension: last_2months  {
+    type: date
+    sql: DATE_SUB((CURRENT_DATE) , INTERVAL 2 MONTH);;
   }
 
   dimension: business_days  {

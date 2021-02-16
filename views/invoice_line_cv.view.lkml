@@ -329,13 +329,21 @@ measure: Total_Purchases_Hidden {
     value_format: "$#,##0;($#,##0)"
   }
 
+  dimension: Non_Compliant {
+    # type: yesno
+    sql:CASE WHEN ${product_cv.item_type_cde} in (1,9,30)
+    AND ${cardinal_account_group_cv.source_contract} = 'N' Then 'Yes' else 'No' END ;;
+  }
+
   measure: Non_Compliant_Purchases{
     label: "Non Compliant Purchases"
     type: sum
     sql: ${ext_sell_dlr} ;;
     value_format: "$#,##0;($#,##0)"
     filters: [
-      product_cv.item_type_cde: "1,9,30"
+      product_cv.item_type_cde: "1,9,30",
+      time_detail_cv.order_dte: "last month,1 month ago"
+
     ]
 
   }
