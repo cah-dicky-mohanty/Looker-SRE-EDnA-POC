@@ -3,6 +3,7 @@ connection: "edna_non-prod"
 # include all the views
 include: "/views/**/*.view"
 include: "/tests_invoice_line_cv.lkml"
+# include: "/invoice_line_derived_table.view"
 
 # include: "/common_views/**/rebate_table.view.lkml"
 
@@ -144,6 +145,29 @@ join: aap_rebate_table {
 
  }
 
+# Place in `sre_edna_model` model
+
+# explore: +SRE_Explore {
+#   aggregate_table: rollup__aap_rebate_table_aap_rebate_percent__aap_rebate_table_aap_rebate_spend_high_bound__aap_rebate_table_aap_rebate_spend_low_bound__time_detail_cv_business_days__time_detail_cv_business_days_elapsed__time_detail_cv_business_days_remaining {
+#     query: {
+#       dimensions: [
+#         aap_rebate_table.aap_rebate_percent,
+#         aap_rebate_table.aap_rebate_spend_high_bound,
+#         aap_rebate_table.aap_rebate_spend_low_bound,
+#         time_detail_cv.business_days,
+#         time_detail_cv.business_days_elapsed,
+#         time_detail_cv.business_days_remaining
+#       ]
+#       measures: [invoice_line_cv.Rebate_Inelig_SOURCE_Purchases, invoice_line_cv.SOURCE_Purchases, invoice_line_cv.Source_Purchases_with_Additional]
+#       timezone: "America/Los_Angeles"
+#     }
+#
+#     materialization: {
+#       datagroup_trigger: sre_poc_edna_default_datagroup
+#     }
+#   }
+# }
+
 
 explore: SRE_Explore_2 {
   view_name: account_user_rlt_cv
@@ -193,3 +217,13 @@ explore: SRE_Explore_3 {
     relationship: many_to_many
   }
 }
+
+explore: Date_Explore {
+  view_name: time_detail_cv
+  view_label: "Time Detail"
+}
+
+# explore: invoice_line_derived_table {
+#   view_name: invoice_line_derived_table
+#   view_label: "Invoice Line Derived Table"
+# }

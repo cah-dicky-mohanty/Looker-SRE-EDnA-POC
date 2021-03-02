@@ -11,6 +11,16 @@ sql_table_name: `VI0_PHM_SDW_NP.INVOICE_LINE_CV`;;
     sql: DATE_SUB((CURRENT_DATE) , INTERVAL 12 MONTH);;
   }
 
+  dimension: last_6_month_date {
+    type: date
+    sql: DATE_SUB(CURRENT_DATE, INTERVAL 6 MONTH) ;;
+  }
+
+  dimension: is_last_6_months {
+    type: yesno
+    sql: ${time_detail_cv.rfrnc_dte_date} >= ${last_6_month_date} ;;
+  }
+
   dimension: last_12_month_dte_key_num {
     type: number
     sql: CASE WHEN ${last_12_month_date} = ${time_detail_cv.rfrnc_dte_date}  THEN ${dte_key_num} END ;;
@@ -286,6 +296,34 @@ dimension: is_last_12_months {
       override_type_cv.ovrd_type_id: "I"
     ]
 #     product_program_rlt.spd_indicator: "No"
+  }
+
+  # for the actual last month, use this as a filter: time_detail_cv.rfrnc_dte_date: "last month"
+  # the actual condition for the SOURCE Purchases would be a AND condition, but there exists no data, that's why I used a OR condition.
+  measure: SOURCE_Purchases_prev_month {
+    label: "Source Purchases (Prev Month)"
+    type: sum
+    sql: CASE WHEN (TRIM(${cardinal_account_group_cv.source_contract}) = 'Y') OR (${product_cv.item_type_cde} in (1,9,30))
+         THEN ${ext_sell_dlr}
+         ELSE NULL
+         END;;
+    filters: [
+      time_detail_cv.rfrnc_dte_date: "last 6 months"
+    ]
+  }
+
+  measure: SOURCE_to_Rx_Percent_prev_month {
+    label: "Source to Rx Percent (Previous Month)"
+    type: number
+    sql: ROUND((${SOURCE_Purchases_prev_month}+${ASP})/(${Total_Purchases}+${ASP})*100, 2) ;;
+    value_format: "0.00\%"
+  }
+
+  measure: SOURCE_to_Rx_Percent_Less_SPD_SPX_prev_month {
+    label: "Source to Rx Percent Less SPD/SPX (Previous Month)"
+    type: number
+    sql: ROUND(((${SOURCE_Purchases_prev_month} + ${ASP}) / (${Total_Purchases} + ${ASP} - ${SPD_Purchases} - ${dropship})) * 100, 2)   ;;
+    value_format: "0.00\%"
   }
 
   measure:  Summation{
