@@ -70,6 +70,13 @@ dimension: is_last_12_months {
     </div> ;;
     }
 
+  measure: Ext_Sample {
+    #label: "Ext Sample"
+    type: sum
+    sql: ${ext_sell_dlr};;
+
+  }
+
   measure: Total_Purchases_ASP {
     #label: "Total Sales ASP"
     type: sum
@@ -342,8 +349,8 @@ measure: Total_Purchases_Hidden {
     value_format: "$#,##0;($#,##0)"
     filters: [
       product_cv.item_type_cde: "1,9,30",
-      time_detail_cv.order_dte: "last month,1 month ago"
-
+      cardinal_account_group_cv.source_contract: "N",
+      time_detail_cv.order_dte: "last 6 months"
     ]
 
   }
@@ -732,6 +739,7 @@ measure: Total_Purchases_Hidden {
     type: number
     sql: ${TABLE}.FLG_KEY_NUM ;;
   }
+
 
   dimension: inv_dte_key_part {
     type: number

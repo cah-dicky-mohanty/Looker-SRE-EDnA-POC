@@ -38,6 +38,7 @@ explore: SRE_Explore{
   and ${ship_to_account_cv.curr_vrsn_flg} = 'Y'
   and ${invoice_line_cv.corp_acct_key_num} = 1
   ;;
+
 }
 # and ${pricing_segment_cv.price_sgmnt_cde} in (120,121,122,123,124)
 
