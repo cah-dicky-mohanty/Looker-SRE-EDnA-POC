@@ -145,4 +145,9 @@ view: pricing_segment_cv {
     type: count
     drill_fields: []
   }
+
+  measure:  pricing_count{
+    type: count_distinct
+    sql: ${TABLE}.PRICE_SGMNT_KEY_NUM ;;
+  }
 }

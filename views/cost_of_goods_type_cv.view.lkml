@@ -145,4 +145,9 @@ view: cost_of_goods_type_cv {
     type: count
     drill_fields: []
   }
+
+  measure: cost_count {
+    type: count_distinct
+    sql:${TABLE}.COGS_TYPE_KEY_NUM  ;;
+  }
 }

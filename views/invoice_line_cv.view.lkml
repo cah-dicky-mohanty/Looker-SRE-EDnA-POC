@@ -74,6 +74,7 @@ dimension: is_last_12_months {
     #label: "Ext Sample"
     type: sum
     sql: ${ext_sell_dlr};;
+    value_format: "$#,##0;($#,##0)"
 
   }
 
@@ -97,6 +98,29 @@ dimension: is_last_12_months {
       ;;
 
   }
+
+  measure: Total_Purchases_current_month {
+    label: "Current Month Sales"
+    type: sum
+    sql: ${ext_sell_dlr};;
+    value_format: "$#,##0;($#,##0)"
+    filters: [
+            time_detail_cv.order_dte: "last 7 months"
+    ]
+
+  }
+
+  measure: Total_Purchases_previous_month {
+    label: "Previous Month Sales"
+    type: sum
+    sql: ${ext_sell_dlr};;
+    value_format: "$#,##0;($#,##0)"
+    filters: [
+      time_detail_cv.order_dte: "last 8 months"
+    ]
+
+  }
+
 
   measure: latest_rebate_status_KPI_ASP {
     #   label: "Latest Rebate Status KPI"
@@ -353,6 +377,12 @@ measure: Total_Purchases_Hidden {
       time_detail_cv.order_dte: "last 6 months"
     ]
 
+  }
+
+  measure: Quantity_Purchased {
+    label: "Quantity Purchased"
+    type: sum
+    sql: ${ship_qty} ;;
   }
 
   measure: Total_Rx_Purchases {

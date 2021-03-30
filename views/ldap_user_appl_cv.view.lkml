@@ -170,4 +170,9 @@ view: ldap_user_appl_cv {
     type: count
     drill_fields: []
   }
+
+  measure:  ldap_count{
+    type: count_distinct
+    sql: ${TABLE}.LDAP_USER_APPL_KEY_NUM ;;
+  }
 }

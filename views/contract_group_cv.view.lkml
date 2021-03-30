@@ -265,4 +265,9 @@ view: contract_group_cv {
     type: count
     drill_fields: []
   }
+
+  measure: contract_count {
+    type: count_distinct
+    sql: ${TABLE}.CNTRCT_GROUP_KEY_NUM ;;
+  }
 }

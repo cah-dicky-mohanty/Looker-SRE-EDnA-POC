@@ -155,4 +155,9 @@ view: product_program_rlt_cv {
     type: count
     drill_fields: []
   }
+
+  measure: prod_prog_count {
+    type: count_distinct
+    sql: ${TABLE}.prod_key_num  ;;
+  }
 }

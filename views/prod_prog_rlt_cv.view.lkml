@@ -170,4 +170,9 @@ view: prod_prog_rlt_cv {
     type: count
     drill_fields: []
   }
+
+  measure: prod_prog_count {
+    type: count_distinct
+    sql:  ${TABLE}.CORP_ITEM_NUM;;
+  }
 }

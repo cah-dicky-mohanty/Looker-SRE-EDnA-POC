@@ -3,6 +3,7 @@ connection: "edna_non-prod"
 # include all the views
 include: "/views/**/*.view"
 include: "/tests_invoice_line_cv.lkml"
+include: "/sre_row_count.lkml"
 
 # include: "/common_views/**/rebate_table.view.lkml"
 
@@ -47,7 +48,7 @@ explore: SRE_Explore{
     type: left_outer
     sql_on: ${invoice_line_cv.acct_key_num} = ${ship_to_account_cv.acct_key_num} ;;
     relationship: many_to_one
-    fields: [ship_to_customer_num, ship_to_location_num, acct_key_num,account_selector, account_name_selector,curr_vrsn_flg]
+    fields: [ship_to_count,ship_to_customer_num, ship_to_location_num, acct_key_num,account_selector, account_name_selector,curr_vrsn_flg]
   }
 
   join: time_detail_cv {
@@ -86,7 +87,7 @@ explore: SRE_Explore{
     type: left_outer
     sql_on: ${invoice_line_cv.price_sgmnt_key_num} = ${pricing_segment_cv.price_sgmnt_key_num}  ;;
 
-    fields: [price_sgmnt_key_num, price_sgmnt_cde, price_sgmnt_desc]
+    fields: [price_sgmnt_key_num, price_sgmnt_cde, price_sgmnt_desc,pricing_count]
     relationship: many_to_one
   }
 
@@ -94,7 +95,7 @@ explore: SRE_Explore{
     view_label: "Override Type"
     type: left_outer
     sql_on: ${override_type_cv.ovrd_type_key_num} = ${invoice_line_cv.ovrd_type_key_num};;
-    fields: [ovrd_type_key_num, ovrd_type_desc, ovrd_type_id ]
+    fields: [ovrd_type_key_num, ovrd_type_desc, ovrd_type_id,override_count ]
     relationship: many_to_one
   }
 
@@ -102,7 +103,7 @@ explore: SRE_Explore{
     view_label: "Product"
     type: left_outer
     sql_on: ${invoice_line_cv.prod_key_num} = ${product_cv.prod_key_num};;
-    fields: [drill_dimension_dollars ,drill_dimension_percent, volume_breakdown_kpis, prod_key_num, corp_item_num, ndc_cde,gen_nam,trade_nam, supplier_nam, prod_nam,item_type_cde,rx_indicator,card_gen_ind_cde,card_gen_ind_desc,fdb_ahfs_id,size_txt, pack_size_qty, pack_qty,strgth_txt,total_qty]
+    fields: [drill_dimension_dollars ,drill_dimension_percent, volume_breakdown_kpis, prod_key_num, corp_item_num, ndc_cde,gen_nam,trade_nam, supplier_nam, prod_nam,item_type_cde,rx_indicator,card_gen_ind_cde,card_gen_ind_desc,fdb_ahfs_id,size_txt, pack_size_qty, pack_qty,strgth_txt,prod_count,total_qty]
     relationship: many_to_one
   }
 
@@ -110,7 +111,7 @@ explore: SRE_Explore{
     view_label: "Product Program Reltn"
     type: left_outer
     sql_on: ${product_program_rlt_cv.prod_key_num} = ${product_cv.prod_key_num};;
-    fields: [prod_key_num]
+    fields: [prod_key_num, prod_prog_count]
     relationship: many_to_one
   }
 
@@ -118,7 +119,7 @@ explore: SRE_Explore{
     view_label: "Cost of Goods"
     type: left_outer
     sql_on: ${cost_of_goods_type_cv.cogs_type_key_num} = ${invoice_line_cv.cogs_type_key_num};;
-    fields: [cogs_type_key_num, cogs_type_desc, cogs_type_id]
+    fields: [cogs_type_key_num, cogs_type_desc, cogs_type_id,cost_count]
     relationship: many_to_one
   }
 
@@ -126,7 +127,7 @@ explore: SRE_Explore{
     view_label: "Order Entry Method"
     type: left_outer
     sql_on: ${invoice_line_cv.order_entry_mthd_key_num} = ${order_entry_method_cv.order_entry_mthd_key_num};;
-    fields: [order_entry_mthd_key_num, order_entry_mthd_desc, order_entry_mthd_id]
+    fields: [order_entry_mthd_key_num, order_entry_mthd_desc, order_entry_mthd_id,order_entry_count]
     relationship: many_to_one
   }
 
@@ -145,7 +146,6 @@ join: aap_rebate_table {
 
  }
 
-
 explore: SRE_Explore_2 {
   view_name: account_user_rlt_cv
   view_label: "Account User Rlt"
@@ -156,7 +156,7 @@ explore: SRE_Explore_2 {
     type: left_outer
     sql_on: ${account_user_rlt_cv.mrcry_user_id} = ${mercury_user_cv.mrcry_user_id} ;;
     relationship: many_to_one
-    fields: [mrcry_user_id, user_id, dynamic_user_id]
+    fields: [mrcry_user_id, user_id, dynamic_user_id, mercury_count]
     sql_where: ${mercury_user_cv.user_id_active_flg} = 'Y'  ;;
   }
 
@@ -165,7 +165,7 @@ explore: SRE_Explore_2 {
     type: left_outer
     sql_on: ${ldap_user_appl_cv.mrcry_user_id} = ${mercury_user_cv.mrcry_user_id} ;;
     relationship: many_to_one
-    fields: [mrcry_user_id, appl_nam]
+    fields: [mrcry_user_id, appl_nam, ldap_count]
     sql_where: ${ldap_user_appl_cv.appl_nam} = 'ORDER_EXPRESS_REPORTING'  ;;
   }
 

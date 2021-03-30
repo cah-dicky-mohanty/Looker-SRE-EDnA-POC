@@ -145,4 +145,9 @@ view: override_type_cv {
     type: count
     drill_fields: []
   }
+
+  measure: override_count {
+    type: count_distinct
+    sql: ${TABLE}.OVRD_TYPE_KEY_NUM ;;
+  }
 }

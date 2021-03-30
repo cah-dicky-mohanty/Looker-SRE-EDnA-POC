@@ -1275,4 +1275,10 @@ view: product_cv {
     type: count
     drill_fields: []
   }
+
+  measure: prod_count {
+    type: count_distinct
+    sql: ${prod_key_num} ;;
+  }
 }
+

@@ -145,4 +145,9 @@ view: account_user_rlt_cv {
     type: count
     drill_fields: []
   }
+
+  measure:  acct_row_count{
+    type: count_distinct
+    sql: ${TABLE}.acct_key_num  ;;
+  }
 }

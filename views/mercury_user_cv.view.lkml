@@ -232,4 +232,9 @@ view: mercury_user_cv {
     type: count
     filters: [user_id_active_flg: "Y"]
   }
+
+  measure: mercury_count {
+    type: count_distinct
+    sql: ${TABLE}.MRCRY_USER_ID ;;
+  }
 }

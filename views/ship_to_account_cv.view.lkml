@@ -2362,4 +2362,9 @@ view: ship_to_account_cv {
     type: count
     drill_fields: []
   }
+
+  measure: ship_to_count {
+    type: count_distinct
+    sql: ${TABLE}.ACCT_KEY_NUM ;;
+  }
 }

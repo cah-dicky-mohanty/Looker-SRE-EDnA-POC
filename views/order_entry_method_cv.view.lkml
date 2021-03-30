@@ -150,4 +150,9 @@ view: order_entry_method_cv {
     type: count
     drill_fields: []
   }
+
+  measure: order_entry_count {
+    type: count_distinct
+    sql: ${TABLE}.ORDER_ENTRY_MTHD_KEY_NUM ;;
+  }
 }
